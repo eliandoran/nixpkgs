@@ -31809,6 +31809,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  jlink = callPackage ../development/tools/jlink {};
+  
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {

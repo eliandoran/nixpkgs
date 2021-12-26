@@ -29459,6 +29459,8 @@ with pkgs;
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
+  microej-sdk = callPackage ../applications/editors/microej-sdk { };
+
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};

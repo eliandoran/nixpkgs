@@ -3,26 +3,26 @@
 , fetchurl
 , makeDesktopItem
 , makeWrapper
-, openjdk8
+, openjdk11
 , unzip
-, glib
-, gtk2
+, glib, glib-networking
+, gtk3
 , libXtst
 , libsecret
-, pkgs
-, gnome
+, webkitgtk
 , ...
 }:
 
 let
-  gtk = gtk2;
+  gtk = gtk3;
+  jdk = openjdk11;
 in stdenv.mkDerivation rec {
   pname = "microej-sdk";
-  version = "4.1.5";
+  version = "22.06";
 
   src = fetchurl {
     url = "https://repository.microej.com/packages/SDK/${version}/zip/microej-sdk-${version}-linux_x86_64.zip";
-    sha256 = "EaaukOzFwUB6A8vBneF1JDIFrH/ENu/EFjQkITdU518=";
+    sha256 = "sha256-ZnN0O11X8/oBI6zfXHMcSxdhJ+65U4EGZULGet4GQ+c=";
   };
 
   desktopItem = makeDesktopItem {
@@ -36,9 +36,9 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper openjdk8 unzip
+    makeWrapper jdk unzip
     glib gtk libXtst libsecret
-  ];
+  ] ++ lib.optional (webkitgtk != null) webkitgtk;
 
   buildCommand = ''
     mkdir -p $out
@@ -53,10 +53,11 @@ in stdenv.mkDerivation rec {
     # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
     productId=$(sed 's/id=//; t; d' $out/.eclipseproduct)
 
-    makeWrapper $out/MicroEJ-SDK $out/bin/microej-sdk \
-      --prefix PATH : ${openjdk8}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ])} \
-      --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \
+    makeWrapper $out/MicroEJ-SDK $out/bin/${pname} \
+      --prefix PATH : ${jdk}/bin \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.

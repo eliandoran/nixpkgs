@@ -33783,4 +33783,6 @@ with pkgs;
   };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
+
+  isoimagewriter = libsForQt5.callPackage ../applications/misc/isoimagewriter { };
 }

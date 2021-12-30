@@ -25506,6 +25506,8 @@ with pkgs;
 
   manul = callPackage ../development/tools/manul { };
 
+  microej-sdk = callPackage ../applications/editors/microej-sdk { };
+
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};

@@ -61,5 +61,8 @@ in stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/MicroEJ-SDK.xpm $out/share/pixmaps/microej-sdk.xpm
+
+    # Increase max memory allocation
+    echo -e "\n-Xms1024m\n-Xmx4096m\n-Xss1024m" >> $out/MicroEJ-SDK.ini
   '';
 }

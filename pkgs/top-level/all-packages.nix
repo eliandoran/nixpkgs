@@ -5009,7 +5009,7 @@ with pkgs;
   escrotum = callPackage ../tools/graphics/escrotum { };
 
   etcher = callPackage ../tools/misc/etcher {
-    electron = electron_14;
+    electron = electron_12;
   };
 
   ethtool = callPackage ../tools/misc/ethtool { };

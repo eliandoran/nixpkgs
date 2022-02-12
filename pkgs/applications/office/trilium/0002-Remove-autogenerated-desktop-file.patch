@@ -1,7 +1,5 @@
-diff --git a/electron.js b/electron.js
-index cc3f8664..1557f73c 100644
---- a/electron.js
-+++ b/electron.js
+--- a/resources/app.asar.unpacked/electron.js
++++ b/resources/app.asar.unpacked/electron.js
 @@ -9,7 +9,6 @@ const tray = require('./src/services/tray');
  // Adds debug features like hotkeys for triggering dev tools and reload
  require('electron-debug')();
@@ -9,4 +7,3 @@ index cc3f8664..1557f73c 100644
 -appIconService.installLocalAppIcon();
  
  require('electron-dl')({ saveAs: true });
- 

@@ -162,6 +162,7 @@
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/k3b.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
   ./programs/less.nix

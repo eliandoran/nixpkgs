@@ -1,25 +1,42 @@
 {
   fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
+  fetchpatch,
 
   # Optional but increases closure only negligibly. Also, while libxml2
   # builds fine on windows, but libarchive has trouble linking windows
   # things it depends on for some reason.
   xarSupport ? stdenv.hostPlatform.isUnix,
+
+  # for passthru.tests
+  cmake, nix, samba
 }:
 
 assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.5.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "sha256-H00UJ+ON1kBc19BgWBBKmO8f23oAg2mk7o9hhDhn50Q=";
+    sha256 = "1q4ij55yirrbrk5iwnh3r90ayq92n02shxc4qkyf73h8zqlfrcj7";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-26280.patch";
+      url = "https://github.com/libarchive/libarchive/commit/cfaa28168a07ea4a53276b63068f94fce37d6aff.patch";
+      sha256 = "1xvgpj6l4a5i6sy5wvq7v9n7am43mcbgbfsvgzmpmrlkr148kn3g";
+    })
+    (fetchpatch {
+      name = "oss-fuzz-38764-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/9ad5f077491b9536f01dadca1724385c39cd7613.patch";
+      sha256 = "0106gc5vsp57yg2p7y2lyddradzgsbnmnbbj1g9pw6daypj3czhd";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -48,6 +65,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit cmake nix samba;
+  };
 
   meta = {
     description = "Multi-format archive and compression library";

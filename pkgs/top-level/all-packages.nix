@@ -8660,11 +8660,7 @@ with pkgs;
 
   pm2 = nodePackages.pm2;
 
-  pngcheck = callPackage ../tools/graphics/pngcheck {
-    zlib = zlib.override {
-      static = true;
-    };
-  };
+  pngcheck = callPackage ../tools/graphics/pngcheck { };
 
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
@@ -10745,6 +10741,8 @@ with pkgs;
   xkeysnail = callPackage ../tools/X11/xkeysnail { };
 
   xfstests = callPackage ../tools/misc/xfstests { };
+
+  xprintidle = callPackage ../tools/X11/xprintidle {};
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 

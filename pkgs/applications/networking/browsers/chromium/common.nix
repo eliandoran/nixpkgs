@@ -39,14 +39,12 @@
 , glibc # gconv + locale
 
 # Package customization:
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , cupsSupport ? true, cups ? null
 , proprietaryCodecs ? true
 , pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
-, libgcrypt ? null # gnomeSupport || cupsSupport
+, libgcrypt ? null # cupsSupport
 , systemdSupport ? stdenv.isLinux
 , systemd
 }:
@@ -62,13 +60,6 @@ let
   clangFormatPython3 = fetchurl {
     url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
     sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
-  };
-  # https://webrtc-review.googlesource.com/c/src/+/255601
-  webrtcWaylandScreenshareCoredumpFix = fetchurl {
-    # PipeWire capturer: check existence of cursor metadata
-    name = "webrtc-wayland-screenshare-coredump-fix.patch";
-    url = "https://webrtc-review.googlesource.com/changes/src~255601/revisions/2/patch?download";
-    hash = "sha256-PHGwEoYhMa+ZL2ner10FwdGUWUxsVr+HWuZOAEugYDY=";
   };
 
   # The additional attributes for creating derivations based on the chromium
@@ -161,8 +152,6 @@ let
       curl
       libepoxy
     ] ++ optional systemdSupport systemd
-      ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
-      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
@@ -173,9 +162,7 @@ let
       ./patches/widevine-79.patch
     ];
 
-    postPatch = optionalString (versionRange "100" "101") ''
-      base64 --decode ${webrtcWaylandScreenshareCoredumpFix} | patch -p1 -d third_party/webrtc
-    '' + ''
+    postPatch = ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -280,7 +267,7 @@ let
 
       # Optional features:
       use_gio = true;
-      use_gnome_keyring = gnomeKeyringSupport;
+      use_gnome_keyring = false; # Superseded by libsecret
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -292,6 +279,8 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
+      # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
+      chrome_pgo_phase = 0;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

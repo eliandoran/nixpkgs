@@ -17,8 +17,7 @@ let
     i686-linux = "i386";
     x86_64-linux = "amd64";
     aarch64-linux = "aarch64";
-    powerpc64le-linux = "ppc64le";
-  }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
+  }.${stdenv.system} or (throw "Unsupported platform");
 
   update = "322";
   build = "ga";
@@ -109,20 +108,15 @@ let
 
     installPhase = ''
       mkdir -p $out/lib
-
       mv build/*/images/j2sdk-image $out/lib/openjdk
-
       # Remove some broken manpages.
       rm -rf $out/lib/openjdk/man/ja*
-
       # Mirror some stuff in top-level.
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
-
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
-
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
       ${lib.optionalString headless ''
@@ -130,24 +124,20 @@ let
         rm $out/lib/openjdk/jre/bin/policytool
         rm $out/lib/openjdk/bin/{policytool,appletviewer}
       ''}
-
       # Move the JRE to a separate output
       mkdir -p $jre/lib/openjdk
       mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
       mkdir $out/lib/openjdk/jre
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
-
       # Make sure cmm/*.pf are not symlinks:
       # https://youtrack.jetbrains.com/issue/IDEA-147272
       rm -rf $out/lib/openjdk/jre/lib/cmm
       ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
-
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
         mkdir -p $jre/lib/openjdk/jre/lib/fonts
         ln -s ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
       ''}
-
       # Remove duplicate binaries.
       for i in $(cd $out/lib/openjdk/bin && echo *); do
         if [ "$i" = java ]; then continue; fi
@@ -155,14 +145,12 @@ let
           ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
         fi
       done
-
       # Generate certificates.
       (
         cd $jre/lib/openjdk/jre/lib/security
         rm cacerts
         perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
       )
-
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
       ln -s $jre/lib/openjdk/jre $out/jre
@@ -176,7 +164,6 @@ let
       # properly.
       mkdir -p $jre/nix-support
       printWords ${setJavaClassPath} > $jre/nix-support/propagated-build-inputs
-
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook

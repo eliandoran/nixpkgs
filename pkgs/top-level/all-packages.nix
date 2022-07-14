@@ -1,8 +1,8 @@
 /* The top-level package collection of nixpkgs.
- * It is sorted by categories corresponding to the folder names
- * in the /pkgs folder. Inside the categories packages are roughly
- * sorted by alphabet, but strict sorting has been long lost due
- * to merges. Please use the full-text search of your editor. ;)
+ * It is sorted by categories corresponding to the folder names in the /pkgs
+ * folder. Inside the categories packages are roughly sorted by alphabet, but
+ * strict sorting has been long lost due to merges. Please use the full-text
+ * search of your editor. ;)
  * Hint: ### starts category names.
  */
 { lib, noSysDirs, config, overlays }:
@@ -379,6 +379,8 @@ with pkgs;
   evans = callPackage ../development/tools/evans { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
+
+  frece = callPackage ../development/tools/frece { };
 
   frugal = callPackage ../development/tools/frugal { };
 
@@ -3335,7 +3337,9 @@ with pkgs;
 
   dosage = callPackage ../applications/graphics/dosage { };
 
-  dotenv-linter = callPackage ../development/tools/analysis/dotenv-linter { };
+  dotenv-linter = callPackage ../development/tools/analysis/dotenv-linter {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (ocamlPackages) dot-merlin-reader;
 
@@ -10984,6 +10988,12 @@ with pkgs;
 
   toybox = callPackage ../tools/misc/toybox { };
 
+  trackma = callPackage ../tools/misc/trackma { };
+
+  trackma-curses = trackma.override { withCurses = true; };
+
+  trackma-gtk = trackma.override { withGtk = true; };
+
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
@@ -12317,6 +12327,8 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
     tex = texlive.combined.scheme-full;
   };
+
+  bun = callPackage ../development/web/bun { };
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
@@ -20012,7 +20024,7 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
-    openssl_3_0;
+    openssl_3;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
 
@@ -22055,7 +22067,6 @@ with pkgs;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
-    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22066,8 +22077,7 @@ with pkgs;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
-    openssl = openssl_3_0;
-    pcre = pcre2;
+    openssl = openssl_3;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22076,8 +22086,7 @@ with pkgs;
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
-    openssl = openssl_3_0;
-    pcre = pcre2;
+    openssl = openssl_3;
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -23958,11 +23967,15 @@ with pkgs;
     buildBarebox
     bareboxTools;
 
-  uclibc = callPackage ../os-specific/linux/uclibc { };
+  uclibc-ng = callPackage ../os-specific/linux/uclibc-ng { };
 
-  uclibcCross = callPackage ../os-specific/linux/uclibc {
+  uclibc-ng-cross = callPackage ../os-specific/linux/uclibc-ng {
     stdenv = crossLibcStdenv;
   };
+
+  # Aliases
+  uclibc = uclibc-ng;
+  uclibcCross = uclibc-ng-cross;
 
   eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
 
@@ -25132,6 +25145,8 @@ with pkgs;
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
+  adl = callPackage ../applications/video/adl { };
+
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
@@ -25454,6 +25469,8 @@ with pkgs;
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
+    # LLVM 11 crashes when compiling GHOST_SystemCocoa.mm
+    stdenv = if stdenv.isDarwin then llvmPackages_10.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 

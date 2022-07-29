@@ -255,6 +255,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  benthos = callPackage ../development/tools/benthos {};
+
   beyond-identity = callPackage ../tools/security/beyond-identity {};
 
   bingo = callPackage ../development/tools/bingo {};
@@ -1186,6 +1188,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  tere = callPackage ../tools/misc/tere { };
+
   termusic = callPackage ../applications/audio/termusic { };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
@@ -1870,6 +1874,8 @@ with pkgs;
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
+  aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
+
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
@@ -2487,6 +2493,8 @@ with pkgs;
   ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
 
   sshchecker = callPackage ../tools/security/sshchecker { };
+
+  sshs = callPackage ../development/tools/sshs { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
@@ -3413,7 +3421,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_17;
+    electron = electron_19;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5551,6 +5559,8 @@ with pkgs;
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
   efivar = callPackage ../tools/system/efivar { };
+
+  eget = callPackage ../tools/misc/eget { };
 
   evemu = callPackage ../tools/system/evemu { };
 
@@ -9730,6 +9740,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  railway = callPackage ../development/tools/railway { };
+
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -9797,6 +9809,8 @@ with pkgs;
   redpanda = callPackage ../servers/redpanda { };
 
   redsocks = callPackage ../tools/networking/redsocks { };
+
+  renpy = callPackage ../development/interpreters/renpy { };
 
   rep = callPackage ../development/tools/rep { };
 
@@ -10992,7 +11006,9 @@ with pkgs;
 
   trackma-curses = trackma.override { withCurses = true; };
 
-  trackma-gtk = trackma.override { withGtk = true; };
+  trackma-gtk = trackma.override { withGTK = true; };
+
+  trackma-qt = trackma.override { withQT = true; };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
@@ -13731,6 +13747,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
+  rust_1_61 = callPackage ../development/compilers/rust/1_61.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_14 = llvmPackages_14.libllvm;
+  };
   rust = rust_1_60;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -13738,6 +13758,7 @@ with pkgs;
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
 
   rustPackages_1_60 = rust_1_60.packages.stable;
+  rustPackages_1_61 = rust_1_61.packages.stable;
   rustPackages = rustPackages_1_60;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
@@ -14927,7 +14948,8 @@ with pkgs;
     electron_15
     electron_16
     electron_17
-    electron_18;
+    electron_18
+    electron_19;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -18361,6 +18383,8 @@ with pkgs;
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libcifpp = callPackage ../development/libraries/libcifpp { };
+
   libcint = callPackage ../development/libraries/libcint { };
 
   libclc = callPackage ../development/libraries/libclc { };
@@ -19316,6 +19340,10 @@ with pkgs;
   };
 
   libuinputplus = callPackage ../development/libraries/libuinputplus { };
+
+  libuiohook = callPackage ../development/libraries/libuiohook {
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices Carbon;
+  };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
@@ -22902,6 +22930,8 @@ with pkgs;
   inherit (python3Packages) bedup;
 
   bolt = callPackage ../os-specific/linux/bolt { };
+
+  bpf-linker = callPackage ../development/tools/bpf-linker { };
 
   bpfmon = callPackage ../os-specific/linux/bpfmon { };
 
@@ -32814,6 +32844,8 @@ with pkgs;
 
   diamond = callPackage ../applications/science/biology/diamond { };
 
+  dssp = callPackage ../applications/science/biology/dssp { };
+
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
   eggnog-mapper = callPackage ../applications/science/biology/eggnog-mapper { };
@@ -32857,6 +32889,8 @@ with pkgs;
   macse = callPackage ../applications/science/biology/macse { };
 
   MACS2 = callPackage ../applications/science/biology/MACS2 { };
+
+  mafft = callPackage ../applications/science/biology/mafft { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
 
@@ -34135,6 +34169,9 @@ with pkgs;
   };
 
   libjack2 = jack2.override { prefix = "lib"; };
+
+  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
+  jack_autoconnect = jack-autoconnect;
 
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 

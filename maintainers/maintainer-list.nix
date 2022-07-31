@@ -14708,4 +14708,10 @@
     github = "snpschaaf";
     githubId = 105843013;
   };
+  eliandoran = {
+    email = "contact@eliandoran.me";
+    name = "Elian Doran";
+    github = "eliandoran";
+    githubId = 21236836;
+  };
 }

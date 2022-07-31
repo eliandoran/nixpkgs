@@ -16079,4 +16079,10 @@
     github = "ziguana";
     githubId = 45833444;
   };
+  eliandoran = {
+    email = "contact@eliandoran.me";
+    name = "Elian Doran";
+    github = "eliandoran";
+    githubId = 21236836;
+  };
 }

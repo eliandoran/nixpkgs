@@ -10,13 +10,25 @@ let
   user = cfg.user;
   group = cfg.group;
 
-  firefly-iii = pkgs.firefly-iii;
+  firefly-iii = pkgs.firefly-iii.override {
+    dataDir = cfg.dataDir;
+  };
 
   defaultUser = "firefly-iii";
   defaultGroup = defaultUser;
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
+  # shell script for local administration
+  artisan = pkgs.writeScriptBin "firefly-iii" ''
+    #! ${pkgs.runtimeShell}
+    cd ${firefly-iii}
+    sudo=exec
+    if [[ "$USER" != ${user} ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u ${user}'
+    fi
+    $sudo ${pkgs.php}/bin/php artisan $*
+  '';
 in {
 
   options.services.firefly-iii = {
@@ -34,8 +46,8 @@ in {
       description = ''
         The root URL that you want to host Firefly III on. All URLs in Firefly III will be generated using this value.
       '';
-      default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
-      defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
+      default = "http${optionalString tlsEnabled "s"}://${cfg.hostname}";
+      defaultText = ''http''${optionalString tlsEnabled "s"}://''${cfg.hostname}'';
       example = "https://example.com";
       type = types.str;
     };
@@ -68,13 +80,13 @@ in {
     };
 
     # Reverse proxy
-    hostname = lib.mkOption {
-      type = lib.types.str;
+    hostname = mkOption {
+      type = types.str;
       default = if config.networking.domain != null then
                   config.networking.fqdn
                 else
                   config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      defaultText = literalExpression "config.networking.fqdn";
       example = "firefly.example.com";
       description = "The hostname to serve Firefly III on.";
     };
@@ -204,10 +216,12 @@ in {
         default = 2525;
         description = "Mail host port.";
       };
-      fromName = mkOption {
+      from = mkOption {
         type = types.str;
-        default = "Firefly III";
-        description = "Mail \"from\" name";
+        default = "firefly@${cfg.hostname}";
+        defaultText = ''firefly@''${cfg.hostname}'';
+        example = "firefly@example.com";
+        description = "Mail \"from\" address";
       };
       user = mkOption {
         type = with types; nullOr str;
@@ -331,13 +345,15 @@ in {
       MAIL_MAILER = mail.driver;
       MAIL_HOST = mail.host;
       MAIL_PORT = mail.port;
-      MAIL_FROM = mail.fromName;
+      MAIL_FROM = mail.from;
       MAIL_USERNAME = mail.user;
       MAIL_PASSWORD._secret = mail.passwordFile;
       MAIL_ENCRYPTION = mail.encryption;
     };
 
     # Set-up script
+    environment.systemPackages = [ artisan ];
+
     systemd.services.firefly-iii-setup = {
       description = "Preparation tasks for Firefly III";
       before = [ "phpfpm-firefly-iii.service" ];
@@ -353,36 +369,23 @@ in {
       script =
         let
           isSecret  = v: isAttrs v && v ? _secret && (isString v._secret || builtins.isPath v._secret);
-          fireflyEnvVars = lib.generators.toKeyValue {
-            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+          fireflyEnvVars = generators.toKeyValue {
+            mkKeyValue = flip generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
-                if isInt             v then toString v
-                else if isString     v then "\"${v}\""
-                else if true  ==     v then "true"
-                else if false ==     v then "false"
-                else if isSecret     v then
-                  if (isString v._secret) then
-                    hashString "sha256" v._secret
-                  else
-                    hashString "sha256" (builtins.readFile v._secret)
-                else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+                if isInt         v then toString v
+                else if isString v then v
+                else if true  == v then "true"
+                else if false == v then "false"
+                else if isSecret v then hashString "sha256" v._secret
+                else throw "unsupported type ${typeOf v}: ${(generators.toPretty {}) v}";
             };
           };
-          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
+          secretPaths = mapAttrsToList (_: v: v._secret) (filterAttrs (_: isSecret) cfg.config);
           mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [
-              (
-                if (isString file) then
-                  builtins.hashString "sha256" file
-                else
-                  builtins.hashString "sha256" (builtins.readFile file)
-              )
-              file
-              "${cfg.dataDir}/.env"
-            ]}
+            replace-secret ${escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
           '';
-          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          secretReplacements = concatMapStrings mkSecretReplacement secretPaths;
+          filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
           fireflyEnv = pkgs.writeText "firefly-iii.env" (fireflyEnvVars filteredConfig);
       in ''
         set -euo pipefail
@@ -431,4 +434,5 @@ in {
 
   };
 
+  meta.maintainers = with maintainers; [ eliandoran ];
 }

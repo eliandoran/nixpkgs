@@ -1357,9 +1357,7 @@ with pkgs;
 
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
-  openmsx = callPackage ../applications/emulators/openmsx {
-    python = python3;
-  };
+  openmsx = callPackage ../applications/emulators/openmsx { };
 
   pcem = callPackage ../applications/emulators/pcem { };
 
@@ -7173,7 +7171,13 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs = ipfs_0_12;
+  ipfs_latest = ipfs_0_14;
+  ipfs_0_12 = callPackage ../applications/networking/ipfs/0.12.nix { };
+  ipfs_0_14 = callPackage ../applications/networking/ipfs/0.14.nix {
+    buildGoModule = buildGo118Module;
+  };
+
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
@@ -10184,7 +10188,9 @@ with pkgs;
 
   secp256k1 = callPackage ../tools/security/secp256k1 { };
 
-  securefs = callPackage ../tools/filesystems/securefs { };
+  securefs = callPackage ../tools/filesystems/securefs {
+    stdenv = clangStdenv;
+  };
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
@@ -23366,6 +23372,8 @@ with pkgs;
   linux_xanmod = linuxKernel.kernels.linux_xanmod;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
+  linuxPackages_xanmod_tt = linuxKernel.packages.linux_xanmod_tt;
+  linux_xanmod_tt = linuxKernel.kernels.linux_xanmod_tt;
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
@@ -26323,7 +26331,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices Cocoa;
   };
 
-  fvwm = callPackage ../applications/window-managers/fvwm { };
+  fvwm = fvwm2;
+  fvwm2 = callPackage ../applications/window-managers/fvwm/2.6.nix { };
+  fvwm3 = callPackage ../applications/window-managers/fvwm/3.nix { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
 
@@ -27446,7 +27456,7 @@ with pkgs;
     ghostscript = null;
   });
 
-  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   });
 
@@ -30064,8 +30074,26 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
+  thunderbird-91-unwrapped = thunderbirdPackages.thunderbird-91;
+  thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
+  thunderbird-91-wayland = wrapThunderbird thunderbird-91-unwrapped { forceWayland = true; };
+
+  thunderbird-102-unwrapped = thunderbirdPackages.thunderbird-102;
+  thunderbird-102 = wrapThunderbird thunderbird-102-unwrapped { };
+  thunderbird-102-wayland = wrapThunderbird thunderbird-102-unwrapped { forceWayland = true; };
+
   thunderbird-bin = thunderbird-bin-91;
   thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
+
+  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-unwrapped {
+    applicationName = "thunderbird";
+    pname = "thunderbird-bin";
+    desktopName = "Thunderbird";
+  };
+  thunderbird-bin-102-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    inherit (gnome) adwaita-icon-theme;
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+  };
 
   thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
     applicationName = "thunderbird";
@@ -30074,6 +30102,7 @@ with pkgs;
   };
   thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     inherit (gnome) adwaita-icon-theme;
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/91_sources.nix;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
@@ -33811,6 +33840,8 @@ with pkgs;
   geant4 = libsForQt5.callPackage ../development/libraries/physics/geant4 { };
 
   cernlib = callPackage ../development/libraries/physics/cernlib { };
+
+  clhep = callPackage ../development/libraries/physics/clhep { };
 
   hepmc2 = callPackage ../development/libraries/physics/hepmc2 { };
 

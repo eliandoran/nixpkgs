@@ -31963,7 +31963,7 @@ with pkgs;
   };
 
   jlink = callPackage ../development/tools/jlink {};
-  
+
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
@@ -34137,6 +34137,14 @@ with pkgs;
   gobuster = callPackage ../tools/security/gobuster { };
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
+
+  guestfs-tools = callPackage ../development/tools/guestfs-tools {
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
+  guestfs-tools-with-appliance = guestfs-tools.override {
+    appliance = libguestfs-appliance;
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 

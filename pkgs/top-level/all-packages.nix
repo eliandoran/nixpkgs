@@ -11350,6 +11350,8 @@ with pkgs;
     inherit lib udisks2 python3;
   };
 
+  video-trimmer = callPackage ../applications/video/video-trimmer { };
+
   via = callPackage ../tools/misc/via {};
 
   vial = callPackage ../tools/misc/vial {};

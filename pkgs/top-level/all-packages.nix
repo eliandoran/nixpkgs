@@ -1122,6 +1122,8 @@ with pkgs;
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
+  gamescope = callPackage ../applications/window-managers/gamescope { };
+
   gay = callPackage ../tools/misc/gay {  };
 
   elkhound = callPackage ../development/tools/elkhound { };
@@ -4678,7 +4680,6 @@ with pkgs;
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    libsigrok = libsigrok_0_3; # not compatible with >= 0.4.0 yet
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
@@ -9455,6 +9456,10 @@ with pkgs;
 
   pngtoico = callPackage ../tools/graphics/pngtoico {
     libpng = libpng12;
+  };
+
+  pngpaste = callPackage ../os-specific/darwin/pngpaste {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   pngtools = callPackage ../tools/graphics/pngtools { };
@@ -15380,13 +15385,6 @@ with pkgs;
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
   };
-  # old version:
-  libsigrok_0_3 = libsigrok.override {
-    python = python3;
-    version = "0.3.0";
-    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
-    doInstallCheck = false;
-  };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
     python3 = python38;
@@ -15395,6 +15393,8 @@ with pkgs;
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
+
+  sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
@@ -21736,7 +21736,9 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
-  dendrite = callPackage ../servers/dendrite { };
+  dendrite = callPackage ../servers/dendrite {
+    buildGoModule = buildGo118Module;
+  };
 
   dex-oidc = callPackage ../servers/dex { };
 
@@ -29753,6 +29755,10 @@ with pkgs;
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
+  routedns = callPackage ../tools/networking/routedns {
+    buildGoModule = buildGo118Module;
+  };
+
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
   smartgithg = callPackage ../applications/version-management/smartgithg {
@@ -30086,7 +30092,7 @@ with pkgs;
   thunderbird-bin = thunderbird-bin-91;
   thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
 
-  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-unwrapped {
+  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-102-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
     desktopName = "Thunderbird";
@@ -31132,18 +31138,17 @@ with pkgs;
 
   inherit (nodePackages) zx;
 
-  zynaddsubfx = zyn-fusion;
+  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
+    guiModule = "zest";
+    fftw = fftwSinglePrec;
+  };
 
-  zynaddsubfx-fltk = callPackage ../applications/audio/zynaddsubfx {
+  zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
 
-  zynaddsubfx-ntk = callPackage ../applications/audio/zynaddsubfx {
+  zynaddsubfx-ntk = zynaddsubfx.override {
     guiModule = "ntk";
-  };
-
-  zyn-fusion = callPackage ../applications/audio/zynaddsubfx {
-    guiModule = "zest";
   };
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS

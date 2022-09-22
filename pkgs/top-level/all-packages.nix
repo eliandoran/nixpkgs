@@ -26241,6 +26241,8 @@ with pkgs;
 
   faircamp = callPackage ../applications/misc/faircamp { };
 
+  fancontrol-gui = libsForQt5.callPackage ../applications/misc/fancontrol-gui { };
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };

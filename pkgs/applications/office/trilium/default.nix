@@ -12,7 +12,7 @@ let
   version = "0.55.1";
 
   desktopSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  desktopSource.sha256 = "0jv1yx1paziw5rnj9ppxbrhjn73rxnjzcjc9ljnabhh960mqdmbn";
+  desktopSource.sha256 = "0c12azw0hrax392ymn25nqszdhsy8p5cf970rfq9d98qp0i8ywf0";
 
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
   serverSource.sha256 = "04yjkmz2ck6r0c2593w2ck4w66x9wjzma0vaddx29b9anh9vrln3";

@@ -10,6 +10,7 @@
 , libXtst
 , libsecret
 , pkgs
+, gnome
 , ...
 }:
 
@@ -71,6 +72,7 @@ in stdenv.mkDerivation rec {
       --set MOZILLA_FIVE_HOME "${oldXulrunner}/usr/lib/firefox-bin-${oldXulrunner.version}" \
       --prefix PATH : ${openjdk8}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ])} \
+      --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.

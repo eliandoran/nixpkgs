@@ -16,21 +16,6 @@
 
 let
   gtk = gtk2;
-  oldXulrunner = pkgs.firefox-bin-unwrapped.override {
-    channel = "release";
-
-    generated = {
-      version = "21.0";
-      sources = [
-        {
-          url = "https://archive.mozilla.org/pub/firefox/releases/21.0/linux-x86_64/en-US/firefox-21.0.tar.bz2";
-          locale = "en-US";
-          arch = "linux-x86_64";
-          sha256 = "sha256-dps3G3/t1OBmMG3jXyY8ZqljSZCEQ3gWiaRiaFyoHAE=";
-        }
-      ];
-    };
-  };
 in stdenv.mkDerivation rec {
   pname = "microej-sdk";
   version = "4.1.5";
@@ -69,7 +54,6 @@ in stdenv.mkDerivation rec {
     productId=$(sed 's/id=//; t; d' $out/.eclipseproduct)
 
     makeWrapper $out/MicroEJ-SDK $out/bin/microej-sdk \
-      --set MOZILLA_FIVE_HOME "${oldXulrunner}/usr/lib/firefox-bin-${oldXulrunner.version}" \
       --prefix PATH : ${openjdk8}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ])} \
       --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \

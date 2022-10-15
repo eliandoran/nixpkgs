@@ -736,6 +736,7 @@ mapAliases ({
   linuxPackages_5_18 = linuxKernel.packages.linux_5_18;
   linuxPackages_5_19 = linuxKernel.packages.linux_5_19;
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
+  linuxPackages_6_0 = linuxKernel.packages.linux_6_0;
   linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
@@ -756,6 +757,7 @@ mapAliases ({
   linux_5_18 = linuxKernel.kernels.linux_5_18;
   linux_5_19 = linuxKernel.kernels.linux_5_19;
   linux_5_4 = linuxKernel.kernels.linux_5_4;
+  linux_6_0 = linuxKernel.kernels.linux_6_0;
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
@@ -967,7 +969,6 @@ mapAliases ({
   paperless-ng = paperless-ngx; # Added 2022-04-11
   parity = openethereum; # Added 2020-08-01
   parity-ui = throw "parity-ui was removed because it was broken and unmaintained by upstream"; # Added 2022-01-10
-  parlatype = throw "parlatype has been removed: unmaintained"; # Added 2022-04-24
   parquet-cpp = throw "'parquet-cpp' has been renamed to/replaced by 'arrow-cpp'"; # Converted to throw 2022-02-22
   patchmatrix = throw "'patchmatrix' has been renamed to/replaced by 'open-music-kontrollers.patchmatrix'"; # Added 2022-03-09
   pass-otp = throw "'pass-otp' has been renamed to/replaced by 'pass.withExtensions'"; # Converted to throw 2022-02-22

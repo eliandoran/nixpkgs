@@ -2097,6 +2097,7 @@ with pkgs;
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   cosign = callPackage ../tools/security/cosign {
+    buildGoModule = buildGo118Module;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
@@ -13202,8 +13203,9 @@ with pkgs;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
 
-  go_1_18 = callPackage ../development/compilers/go/1.18.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
+  go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security Foundation;
   };
 
   go = go_1_17;
@@ -21486,7 +21488,9 @@ with pkgs;
   buildGo117Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_17;
   };
-  buildGo118Package = callPackage ../development/go-packages/generic {
+
+  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
+  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_18;
   };
 
@@ -21495,7 +21499,9 @@ with pkgs;
   buildGo117Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_17;
   };
-  buildGo118Module = callPackage ../development/go-modules/generic {
+
+  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
+  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_18;
   };
 
@@ -28966,6 +28972,8 @@ with pkgs;
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
+
+  parlatype = callPackage ../applications/audio/parlatype { };
 
   packet = callPackage ../development/tools/packet { };
 

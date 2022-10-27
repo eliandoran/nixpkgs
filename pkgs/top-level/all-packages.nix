@@ -1349,7 +1349,15 @@ with pkgs;
 
   melonDS = libsForQt5.callPackage ../applications/emulators/melonDS { };
 
-  mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
+  mgba = callPackage ../applications/emulators/mgba {
+    ffmpeg = ffmpeg_4;
+    lua = lua5_4;
+    inherit (libsForQt5)
+      qtbase
+      qtmultimedia
+      qttools
+      wrapQtAppsHook;
+  };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
@@ -19032,6 +19040,7 @@ with pkgs;
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
 
+  libmicrohttpd_0_9_69 = callPackage ../development/libraries/libmicrohttpd/0.9.69.nix { };
   libmicrohttpd_0_9_70 = callPackage ../development/libraries/libmicrohttpd/0.9.70.nix { };
   libmicrohttpd_0_9_71 = callPackage ../development/libraries/libmicrohttpd/0.9.71.nix { };
   libmicrohttpd_0_9_72 = callPackage ../development/libraries/libmicrohttpd/0.9.72.nix { };
@@ -21002,6 +21011,8 @@ with pkgs;
 
   tomlcpp = callPackage ../development/libraries/tomlcpp { };
 
+  tomlplusplus = callPackage ../development/libraries/tomlplusplus { };
+
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
@@ -22846,9 +22857,7 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws {
-    erlang = erlangR21;
-  };
+  yaws = callPackage ../servers/http/yaws { };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
@@ -28550,6 +28559,8 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
+  opcr-policy = callPackage ../development/tools/opcr-policy { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -32213,6 +32224,8 @@ with pkgs;
 
   polymc = libsForQt5.callPackage ../games/polymc { };
 
+  prismlauncher = libsForQt5.callPackage ../games/prismlauncher { };
+
   pong3d = callPackage ../games/pong3d { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
@@ -34952,6 +34965,8 @@ with pkgs;
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vault = callPackage ../tools/security/vault { };
+
+  vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 

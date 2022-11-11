@@ -26914,6 +26914,8 @@ with pkgs;
 
   microej-sdk = callPackage ../applications/editors/microej-sdk { };
 
+  microej-sdk_4_1_5 = callPackage ../applications/editors/microej-sdk/4.1.5.nix { };
+
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};

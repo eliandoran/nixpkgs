@@ -36680,6 +36680,8 @@ with pkgs;
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
+  khinsider = callPackage ../tools/misc/khinsider { };
+
   xca = libsForQt5.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };

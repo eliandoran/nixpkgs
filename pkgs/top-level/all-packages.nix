@@ -32279,6 +32279,8 @@ with pkgs;
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
+  telegrand = callPackage ../applications/networking/instant-messengers/telegram/telegrand { };
+
   tg = python3Packages.callPackage ../applications/networking/instant-messengers/telegram/tg { };
 
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };

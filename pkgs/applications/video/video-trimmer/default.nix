@@ -14,6 +14,7 @@
 , gtk4
 , libadwaita
 , gst_all_1
+, ffmpeg-full
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full ]}"
+    )
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";

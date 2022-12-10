@@ -28508,6 +28508,8 @@ with pkgs;
 
   famistudio = callPackage ../applications/audio/famistudio { };
 
+  fancontrol-gui = libsForQt5.callPackage ../applications/misc/fancontrol-gui { };
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };

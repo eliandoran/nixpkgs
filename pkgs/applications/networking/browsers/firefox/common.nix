@@ -35,6 +35,7 @@
 , python3
 , runCommand
 , rustPackages_1_61
+, rustPackages_1_64
 , rust-cbindgen
 , unzip
 , which
@@ -142,7 +143,8 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
-  inherit (rustPackages_1_61) cargo rustc rustPlatform;
+  inherit (if lib.versionAtLeast version "108" then rustPackages_1_64 else rustPackages_1_61)
+    cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
@@ -220,7 +222,7 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "103") [
+  patches = lib.optionals (lib.versionOlder version "102.6.0") [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
       name = "rust-cbindgen-0.24.2-compat.patch";
@@ -235,7 +237,7 @@ buildStdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach
+    patchShebangs mach build
   ''
   + extraPostPatch;
 

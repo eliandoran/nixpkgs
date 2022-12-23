@@ -19999,6 +19999,8 @@ with pkgs;
 
   jxrlib = callPackage ../development/libraries/jxrlib { };
 
+  kawpow = callPackage ../development/libraries/kawpow { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   libb64 = callPackage ../development/libraries/libb64 { };

@@ -28324,6 +28324,8 @@ with pkgs;
 
   electrum-grs = libsForQt5.callPackage ../applications/misc/electrum-grs { };
 
+  electrum-ravencoin = libsForQt5.callPackage ../applications/misc/electrum-ravencoin { };
+
   electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };

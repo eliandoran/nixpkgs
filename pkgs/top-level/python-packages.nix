@@ -12109,6 +12109,8 @@ self: super: with self; {
 
   x16r_hash = callPackage ../development/python-modules/x16r_hash { };
 
+  x16rv2_hash = callPackage ../development/python-modules/x16rv2_hash { };
+
   x256 = callPackage ../development/python-modules/x256 { };
 
   xapian = callPackage ../development/python-modules/xapian {

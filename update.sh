@@ -1,10 +1,13 @@
 #!/bin/sh
 
+UPSTREAM_BRANCH="nixos-22.11"
+OWN_BRANCH="own-${UPSTREAM_BRANCH}"
+
 # Move to the correct branch.
-git checkout own-nixos-22.05
+git checkout $OWN_BRANCH
 git pull
 
 # Update the branch with upstream.
 git fetch upstream
-git merge upstream/nixos-22.05 --no-edit
+git merge upstream/$UPSTREAM_BRANCH --no-edit
 git push

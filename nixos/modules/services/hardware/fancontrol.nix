@@ -42,17 +42,6 @@ in
         ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
       };
     };
-
-    systemd.services.fancontrol-restart-on-suspend = {
-      description = "Restarts fancontrol after sleep/suspend";
-      after = [ "hibernate.target" "suspend.target" ];
-      wantedBy = [ "hibernate.target" "suspend.target" ];
-
-      serviceConfig = {
-        ExecStart = "systemctl restart fancontrol.service";
-      };
-    };
-
   };
 
   meta.maintainers = [ maintainers.evils ];

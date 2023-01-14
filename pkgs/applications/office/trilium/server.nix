@@ -1,19 +1,15 @@
-{ stdenv, lib, autoPatchelfHook, fetchurl, nixosTests }:
+{ stdenv, lib, autoPatchelfHook, fetchurl, nixosTests
+, metaCommon }:
 
 let
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "0l53kps7rhf8rx9zx29psvjl3611y7pymfkh2yb13h6iv1c77gdf";
+  serverSource.sha256 = "1h3qkpcl0vdz8vvn4h01b1w84v1ckinkdmyvm8312313fcvmyjzs";
   version = "0.58.5";
 in stdenv.mkDerivation rec {
   pname = "trilium-server";
   inherit version;
-  meta = with lib; {
-    description = "Hierarchical note taking application with focus on building large personal knowledge bases";
-    homepage = "https://github.com/zadam/trilium";
-    license = licenses.agpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+  meta = metaCommon // {
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fliegendewurst ];
   };
 
   src = fetchurl serverSource;

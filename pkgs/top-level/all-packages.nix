@@ -2892,8 +2892,10 @@ with pkgs;
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   goku = callPackage ../os-specific/darwin/goku { };
-
+  
   hexfiend = callPackage ../os-specific/darwin/hexfiend { };
+
+  grandperspective = callPackage ../os-specific/darwin/grandperspective { };
 
   grb = callPackage ../applications/misc/grb { };
 

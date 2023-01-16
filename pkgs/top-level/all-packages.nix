@@ -2907,6 +2907,8 @@ with pkgs;
 
   plausible = callPackage ../servers/web-apps/plausible { };
 
+  rei3 = callPackage ../servers/web-apps/rei3 { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
@@ -34335,7 +34337,7 @@ with pkgs;
   };
 
   jlink = callPackage ../development/tools/jlink {};
-  
+
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {

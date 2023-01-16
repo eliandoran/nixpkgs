@@ -5995,6 +5995,12 @@
     githubId = 37965;
     name = "Léo Stefanesco";
   };
+  indeednotjames = {
+    email = "nix@indeednotjames.com";
+    github = "IndeedNotJames";
+    githubId = 55066419;
+    name = "Emily Lange";
+  };
   infinidoge = {
     name = "Infinidoge";
     email = "infinidoge@inx.moe";
@@ -13064,6 +13070,12 @@
     github = "StarGate01";
     githubId = 6362238;
     name = "Christoph Honal";
+  };
+  stasjok = {
+    name = "Stanislav Asunkin";
+    email = "nixpkgs@stasjok.ru";
+    github = "stasjok";
+    githubId = 1353637;
   };
   steamwalker = {
     email = "steamwalker@xs4all.nl";

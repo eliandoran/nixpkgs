@@ -959,8 +959,6 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
-    # This currently fails with dune
-    strictDeps = false;
   };
 
   shexp = janePackage {

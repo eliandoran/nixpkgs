@@ -25,14 +25,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.13"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.10.0"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-XI2cgyqdy1e/+khyu1QPwekkGRAZLn10yfHO3J528IA=";
+    hash = "sha256-W05ZxpqamYqtFY/2mV2+XODCeuWRE9KhMdMkaAGAiTU=";
   };
 
   nativeBuildInputs = [
@@ -57,17 +57,14 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
   ];
 
   postPatch = ''
-    sed -i pyproject.toml \
-      -e 's/colorama.*/colorama",/' \
-      -e 's/cryptography.*/cryptography",/' \
-      -e 's/distro.*/distro",/'
+    substituteInPlace pyproject.toml --replace "distro>=1.5.0,<1.6.0" "distro>=1.5.0"
   '';
 
   postInstall = ''

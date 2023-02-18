@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.20";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "sha256-fgIr3TyFGDAXP5+qoAaiMKDg/a1MlT6Fv/S/DaA24S8";
+    sha256 = "sha256-cErtSbGetacXizSyhzYg7CmdsIdS1qhXT5XUGHmriFE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!libOnly) [ openldap libedit ];
 
   sourceRoot = "krb5-${version}/src";
+
+  postPatch = ''
+    substituteInPlace config/shlib.conf \
+        --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  '';
 
   libFolders = [ "util" "include" "lib" "build-tools" ];
 

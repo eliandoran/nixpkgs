@@ -1,15 +1,13 @@
-{ lib, stdenvNoCC, nodejs, fetchzip, makeBinaryWrapper, testers }:
+{ lib, stdenvNoCC, nodejs, fetchzip, testers }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
-  version = "5.3.2";
+  version = "5.4.0";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Ld7drg2N+4XUtpsA7Jpg7BrrSWTWBVa1QhuJ+FNOIGw=";
+    sha256 = "sha256-DSYZUYC4WJiVOtxBWWGV3x/4wxpiJRQsfQYjgfNIj/4=";
   };
-
-  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [ nodejs ];
 

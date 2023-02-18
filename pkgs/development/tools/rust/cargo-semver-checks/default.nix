@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.15.2";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+YRyShALdDQDfh5XDY36R29SzbBjlT8mCIucwJ++KrQ=";
+    sha256 = "sha256-nxQ060M5TEUMKtJZ1j3A3v3s1cW1mnHy0/2ZXbxoaMc=";
   };
 
-  cargoSha256 = "sha256-wwsFqoQXasCKfnCBF4qGFIoD7Kj53K9IKQ1auuqTPAM=";
+  cargoSha256 = "sha256-D/rY9d50uKkheEeHe6S04TSdmTyUVgrABIYrFOuZudY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # requires nightly version of cargo-rustdoc
-    "--skip=dump::tests"
     "--skip=query::tests"
     "--skip=verify_binary_contains_lints"
+    "--skip=rustdoc_cmd::tests"
   ];
 
   # use system openssl

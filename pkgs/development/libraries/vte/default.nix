@@ -24,19 +24,19 @@
 , zlib
 , icu
 , systemd
-, systemdSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.2";
+  version = "0.70.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TRW0OA3j9WTVfqvQBjicQHxwXfWwxwAw/cwklxozTYA=";
+    sha256 = "sha256-lFcTSgLzFX/KBPfg05vbDzCZvgo86CtxOdDJioB0jyM=";
   };
 
   patches = [

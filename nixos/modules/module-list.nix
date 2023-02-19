@@ -52,6 +52,8 @@
   ./hardware/corectrl.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
+  ./hardware/flipperzero.nix
+  ./hardware/flirc.nix
   ./hardware/gkraken.nix
   ./hardware/flirc.nix
   ./hardware/gpgsmartcards.nix

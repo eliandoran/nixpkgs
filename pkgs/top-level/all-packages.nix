@@ -30136,8 +30136,6 @@ with pkgs;
         pythonPackages = python3Packages;
   };
 
-  grandperspective = callPackage ../applications/misc/grandperspective { };
-
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
 

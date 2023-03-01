@@ -487,6 +487,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  harpoon = super.harpoon.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace plugin/himalaya.vim \
@@ -1346,6 +1350,15 @@ self: super: {
 
   vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = with self; [ vimproc-vim ];
+  });
+
+  vim-trailing-whitespace = super.vim-trailing-whitespace.overrideAttrs (old: {
+    patches = [(fetchpatch {
+      # https://github.com/bronson/vim-trailing-whitespace/pull/30
+      name = "fix-add-dynamic-TerminalOpen-for-both-vim-and-nvim.patch";
+      url = "https://github.com/bronson/vim-trailing-whitespace/commit/99ef803ebdc01d62b418a3e9386d5f10797bfac3.patch";
+      hash = "sha256-cyanHUKxhbY8c6EkAbpUq7QcEBQABCwZ6NoEUOpd2F8=";
+    })];
   });
 
   vim-zettel = super.vim-zettel.overrideAttrs (old: {

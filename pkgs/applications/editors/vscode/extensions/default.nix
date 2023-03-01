@@ -927,8 +927,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "2023.2.1404";
-          sha256 = "sha256-hszwiETLDKqV4yqchPA1o3WuAgvmY2AwslvvbAhkRCE=";
+          version = "2023.2.2804";
+          sha256 = "sha256-3jQ0CpAGrPLQPpwZx2u3ylfOwy6cBu7WLr0w3h8IM2Y=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1504,8 +1504,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.5.0";
-          sha256 = "sha256-Av4RYnCh0gXQ+uRByl3Can+hvYD8Pc3x0Ec2jDcP6Fk=";
+          version = "9.7.0";
+          sha256 = "sha256-Y1KoCOoOJ8CZ3IReDoyzF404CBy1BAWaZSr48EP7bz4=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1739,6 +1739,23 @@ let
           sha256 = "sha256-eaiR30HjPCpOLUKQqiQ2Oqj+XY+JNnV47bM5KD2Mouk=";
         };
         meta.license = lib.licenses.mit;
+      };
+
+      matthewpi.caddyfile-support = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "caddyfile-support";
+          publisher = "matthewpi";
+          version = "0.2.4";
+          sha256 = "sha256-7D7fNlI55MxD6M8ml/dzBAMwCGCEkC+9aKhreZCVMv4=";
+        };
+        meta = {
+          description = "Rich Caddyfile support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=matthewpi.caddyfile-support";
+          homepage = "https://github.com/caddyserver/vscode-caddyfile";
+          changelog = "https://marketplace.visualstudio.com/items/matthewpi.caddyfile-support/changelog";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ matthewpi ];
+        };
       };
 
       mattn.lisp = buildVscodeMarketplaceExtension {
@@ -2580,8 +2597,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.16.0";
-          sha256 = "sha256-Qr4cYAEvAkvvE6KytVeInJzcMQJZqr/e/KPfelVzjUA=";
+          version = "2.18.0";
+          sha256 = "sha256-HwexlpPW15sXoxPQXDHWcQ8Yvz/5KMtZO4A34rXoXQ8=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

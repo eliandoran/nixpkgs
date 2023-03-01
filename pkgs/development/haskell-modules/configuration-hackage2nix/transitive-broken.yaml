@@ -676,10 +676,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - ascii-cows
- - ascii-superset_1_2_5_0
+ - ascii-superset_1_2_7_0
  - ascii-table
  - ascii-th_1_2_0_0
- - ascii_1_5_2_0
+ - ascii_1_5_4_0
  - asic
  - asil
  - assert4hs-hspec
@@ -865,7 +865,6 @@ dont-distribute-packages:
  - bronyradiogermany-streaming
  - btc-lsp
  - btree
- - btree-concurrent
  - buchhaltung
  - buildbox-tools
  - buildwrapper
@@ -1287,6 +1286,7 @@ dont-distribute-packages:
  - dobutokO3
  - dobutokO4
  - doc-review
+ - domaindriven
  - dormouse-client
  - dovetail
  - dovetail-aeson
@@ -1594,6 +1594,7 @@ dont-distribute-packages:
  - ghc-instances
  - ghc-mod
  - ghc-session
+ - ghc-tags-pipes
  - ghc-tags-plugin
  - ghci-pretty
  - ghcjs-dom-hello
@@ -1868,6 +1869,7 @@ dont-distribute-packages:
  - gridbounds
  - gridland
  - grisette
+ - grisette-monad-coroutine
  - groot
  - gross
  - groundhog-converters
@@ -2299,6 +2301,9 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-aws-sqs-conduit
+ - hw-json
+ - hw-json-simple-cursor
+ - hw-json-standard-cursor
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -2454,7 +2459,6 @@ dont-distribute-packages:
  - jvm
  - jvm-batching
  - jvm-streaming
- - kafka-client
  - kafka-device
  - kafka-device-glut
  - kafka-device-joystick
@@ -3222,7 +3226,6 @@ dont-distribute-packages:
  - qtah-qt5
  - quantfin
  - quantum-random
- - qudb
  - queryparser
  - queryparser-demo
  - queryparser-hive
@@ -3399,6 +3402,7 @@ dont-distribute-packages:
  - rfc-psql
  - rfc-redis
  - rfc-servant
+ - rhine-bayes
  - rhine-gloss
  - rhine-terminal
  - rhythm-game-tutorial
@@ -3660,10 +3664,6 @@ dont-distribute-packages:
  - snaplet-stripe
  - snaplet-tasks
  - snaplet-wordpress
- - snappy-conduit
- - snappy-framing
- - snappy-iteratee
- - snappy-lazy
  - sndfile-enumerators
  - sneakyterm
  - sneathlane-haste
@@ -3863,20 +3863,12 @@ dont-distribute-packages:
  - tbox
  - tcache-AWS
  - tccli
- - tdlib
- - tdlib-gen
- - tdlib-types
  - techlab
  - telegram-bot
  - telegram-raw-api
  - temporal-csound
  - ten-lens
  - ten-unordered-containers
- - tensorflow-core-ops
- - tensorflow-logging
- - tensorflow-ops
- - tensorflow-records
- - tensorflow-records-conduit
  - terminal-text
  - terrahs
  - test-sandbox-compose

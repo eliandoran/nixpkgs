@@ -10,6 +10,7 @@
 , lib
 , makeWrapper
 , nix
+, nixosTests
 , openssh
 , pam
 , pamSupport ? true
@@ -20,13 +21,13 @@
 
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.18.3-1";
+  version = "1.18.5-0";
 
   src = fetchurl {
     name = "${pname}-src-${version}.tar.gz";
     # see https://codeberg.org/forgejo/forgejo/releases
-    url = "https://codeberg.org/attachments/3fdf0967-d3f4-4488-a2bf-276c4a64d97c";
-    hash = "sha256-H69qKdmz5qHJ353UZYztUlStpj/RyE6LA8cDaRnVYAQ=";
+    url = "https://codeberg.org/attachments/bb93c0c9-98c4-465c-bcff-e07ac3ee72a3";
+    hash = "sha256-jyaJ7W/K1Nn44ZhyJHZD+dKObU3hYx6mmDzvbvrR7gw=";
   };
 
   vendorHash = null;
@@ -64,6 +65,8 @@ buildGoModule rec {
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
+
+  passthru.tests = nixosTests.forgejo;
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "update-forgejo";

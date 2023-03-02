@@ -14389,6 +14389,8 @@ with pkgs;
 
   fpc = callPackage ../development/compilers/fpc { };
 
+  fpc-win = callPackage ../development/compilers/fpc/cross.nix { };
+
   g203-led = callPackage ../tools/misc/g203-led { };
 
   gambit = callPackage ../development/compilers/gambit { };

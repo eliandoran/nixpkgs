@@ -2315,6 +2315,12 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+  cbrewster = {
+    email = "cbrewster@hey.com";
+    github = "cbrewster";
+    githubId = 9086315;
+    name = "Connor Brewster";
+  };
   cburstedde = {
     email = "burstedde@ins.uni-bonn.de";
     github = "cburstedde";
@@ -13960,6 +13966,12 @@
     github = "tmarkovski";
     githubId = 1280118;
     name = "Tomislav Markovski";
+  };
+  tmarkus = {
+    email = "tobias@markus-regensburg.de";
+    github = "hesiod";
+    githubId = 3159881;
+    name = "Tobias Markus";
   };
   tmountain = {
     email = "tinymountain@gmail.com";

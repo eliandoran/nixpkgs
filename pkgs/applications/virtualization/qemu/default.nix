@@ -37,31 +37,37 @@
 , qemu  # for passthru.tests
 }:
 
+let
+  hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+in
+
 stdenv.mkDerivation rec {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.2.0";
+  version = "8.0.0-rc0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-W0nOJod0Ta1JSukKiYxSIEo0BuhNBySCoeG+hU7rIVc=";
+    sha256 = "+SOS/sPq5mbsrpkUhtaRhr2kRqMrjDaZ64rCc7HOfPs=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
     makeWrapper removeReferencesTo
-    pkg-config flex bison meson ninja perl
+    pkg-config flex bison meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
     python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
   ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
-  buildInputs = [ zlib glib perl pixman
+  buildInputs = [ zlib glib pixman
     vde2 texinfo lzo snappy libtasn1
     gnutls nettle curl libslirp
   ]
@@ -102,7 +108,7 @@ stdenv.mkDerivation rec {
     # support on nix requires utimensat fallback. The patch adding this fallback
     # set was removed during the process of upstreaming this functionality, and
     # will still be needed in nix until the macOS SDK reaches 10.13+.
-    ./provide-fallback-for-utimensat.patch
+    # ./provide-fallback-for-utimensat.patch
     # Cocoa clipboard support only works on macOS 10.14+
     ./revert-ui-cocoa-add-clipboard-support.patch
     # Standard about panel requires AppKit and macOS 10.13+
@@ -129,7 +135,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
-    chmod +x ./scripts/shaderinclude.pl
+    chmod +x ./scripts/shaderinclude.py
     patchShebangs .
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION

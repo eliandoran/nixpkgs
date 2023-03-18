@@ -61,11 +61,33 @@
 , vulkanSupport ? false
 , addOpenGLRunpath
 , enableVulkan ? vulkanSupport
+
+# darwin support
+, undmg
 }:
 
 let
   inherit (lib) optional optionals makeLibraryPath makeSearchPathOutput makeBinPath
     optionalString strings escapeShellArg;
+
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  pname = "brave";
+  version = "1.49.120";
+
+  src = let
+    base = "https://github.com/brave/brave-browser/releases/download/v${version}";
+  in {
+    x86_64-linux = fetchurl {
+      url = "${base}/brave-browser_${version}_amd64.deb";
+      sha256 = "sha256-KSu6HaNKc7uVY1rSyzU+VZSE2dbIOOrsUx1RYKnz8yU=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "${base}/Brave-Browser-universal.dmg";
+      sha256 = "sha256-Ff7n/8Aec7QHib4PdGNfVgNW3CIhgSO+Xf8NyE4Q6Xc=";
+    };
+  }.${system} or throwSystem;
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
@@ -86,111 +108,118 @@ let
 
     # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
   disableFeatures = optional enableVideoAcceleration "UseChromeOSDirectVideoDecoder";
-in
 
-stdenv.mkDerivation rec {
-  pname = "brave";
-  version = "1.49.120";
+  linux = stdenv.mkDerivation rec {
+    inherit pname version src meta;
 
-  src = fetchurl {
-    url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-KSu6HaNKc7uVY1rSyzU+VZSE2dbIOOrsUx1RYKnz8yU=";
+    dontConfigure = true;
+    dontBuild = true;
+    dontPatchELF = true;
+    doInstallCheck = true;
+
+    nativeBuildInputs = [
+      dpkg
+      (wrapGAppsHook.override { inherit makeWrapper; })
+    ];
+
+    buildInputs = [
+      # needed for GSETTINGS_SCHEMAS_PATH
+      glib gsettings-desktop-schemas gtk3
+
+      # needed for XDG_ICON_DIRS
+      gnome.adwaita-icon-theme
+    ];
+
+    unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+
+    installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out $out/bin
+
+        cp -R usr/share $out
+        cp -R opt/ $out/opt
+
+        export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
+
+        # Fix path to bash in $BINARYWRAPPER
+        substituteInPlace $BINARYWRAPPER \
+            --replace /bin/bash ${stdenv.shell}
+
+        ln -sf $BINARYWRAPPER $out/bin/brave
+
+        for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
+            patchelf \
+                --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+                --set-rpath "${rpath}" $exe
+        done
+
+        # Fix paths
+        substituteInPlace $out/share/applications/brave-browser.desktop \
+            --replace /usr/bin/brave-browser-stable $out/bin/brave
+        substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
+            --replace /opt/brave.com $out/opt/brave.com
+        substituteInPlace $out/share/menu/brave-browser.menu \
+            --replace /opt/brave.com $out/opt/brave.com
+        substituteInPlace $out/opt/brave.com/brave/default-app-block \
+            --replace /opt/brave.com $out/opt/brave.com
+
+        # Correct icons location
+        icon_sizes=("16" "24" "32" "48" "64" "128" "256")
+
+        for icon in ''${icon_sizes[*]}
+        do
+            mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
+            ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
+        done
+
+        # Replace xdg-settings and xdg-mime
+        ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+        ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+
+        runHook postInstall
+    '';
+
+    preFixup = ''
+      # Add command line args to wrapGApp.
+      gappsWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : ${rpath}
+        --prefix PATH : ${binpath}
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+        ${optionalString (enableFeatures != []) ''
+        --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
+        ''}
+        ${optionalString (disableFeatures != []) ''
+        --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
+        ''}
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        ${optionalString vulkanSupport ''
+        --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+        ''}
+        --add-flags ${escapeShellArg commandLineArgs}
+      )
+    '';
+
+    installCheckPhase = ''
+      # Bypass upstream wrapper which suppresses errors
+      $out/opt/brave.com/brave/brave --version
+    '';
+
+    passthru.updateScript = ./update.sh;
   };
 
-  dontConfigure = true;
-  dontBuild = true;
-  dontPatchELF = true;
-  doInstallCheck = true;
+  darwin = stdenv.mkDerivation {
+    inherit pname version src meta;
 
-  nativeBuildInputs = [
-    dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
-  ];
+    nativeBuildInputs = [ undmg ];
 
-  buildInputs = [
-    # needed for GSETTINGS_SCHEMAS_PATH
-    glib gsettings-desktop-schemas gtk3
+    sourceRoot = "Brave Browser.app";
 
-    # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
-  ];
-
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
-
-  installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out $out/bin
-
-      cp -R usr/share $out
-      cp -R opt/ $out/opt
-
-      export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
-
-      # Fix path to bash in $BINARYWRAPPER
-      substituteInPlace $BINARYWRAPPER \
-          --replace /bin/bash ${stdenv.shell}
-
-      ln -sf $BINARYWRAPPER $out/bin/brave
-
-      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
-          patchelf \
-              --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-              --set-rpath "${rpath}" $exe
-      done
-
-      # Fix paths
-      substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser-stable $out/bin/brave
-      substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-          --replace /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/share/menu/brave-browser.menu \
-          --replace /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/opt/brave.com/brave/default-app-block \
-          --replace /opt/brave.com $out/opt/brave.com
-
-      # Correct icons location
-      icon_sizes=("16" "24" "32" "48" "64" "128" "256")
-
-      for icon in ''${icon_sizes[*]}
-      do
-          mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
-          ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
-      done
-
-      # Replace xdg-settings and xdg-mime
-      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
-
-      runHook postInstall
-  '';
-
-  preFixup = ''
-    # Add command line args to wrapGApp.
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${rpath}
-      --prefix PATH : ${binpath}
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-      ${optionalString (enableFeatures != []) ''
-      --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
-      ''}
-      ${optionalString (disableFeatures != []) ''
-      --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
-      ''}
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-      ${optionalString vulkanSupport ''
-      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
-      ''}
-      --add-flags ${escapeShellArg commandLineArgs}
-    )
-  '';
-
-  installCheckPhase = ''
-    # Bypass upstream wrapper which suppresses errors
-    $out/opt/brave.com/brave/brave --version
-  '';
-
-  passthru.updateScript = ./update.sh;
+    installPhase = ''
+      mkdir -p $out/Applications/Brave.app
+      cp -R . $out/Applications/Brave.app
+    '';
+  };
 
   meta = with lib; {
     homepage = "https://brave.com/";
@@ -204,6 +233,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-}
+in if stdenv.isDarwin
+  then darwin
+  else linux

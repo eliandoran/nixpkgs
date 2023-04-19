@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
       mkdir -p $out/sonarqube
       cd ${pname}-${version}
-      cp -R conf extensions logs web data lib temp $out/sonarqube
+      cp -R conf extensions logs web data lib temp elasticsearch $out/sonarqube
       ${if stdenv.isi686 then "cp -R bin/linux-x86-32 $out/sonarqube/bin"
         else if stdenv.isx86_64 then"cp -R bin/linux-x86-64 $out/sonarqube/bin"
         else "echo 'architecture not yet supported'; exit -1;"}

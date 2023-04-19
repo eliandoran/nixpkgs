@@ -39,10 +39,14 @@ stdenv.mkDerivation rec {
         --replace "../../logs/nohup.log" "/tmp/sonar-nohup.log"
 
       # Change default configuration
+      # TODO: use better folders
       substituteInPlace $out/sonarqube/conf/sonar.properties \
         --replace "#sonar.path.data=data" "sonar.path.data=/tmp/sonar-data" \
         --replace "#sonar.path.logs=logs" "sonar.path.logs=/tmp/sonar-logs" \
         --replace "#sonar.path.temp=temp" "sonar.path.temp=/tmp/sonar"
+
+      # TODO: use better folders
+      mkdir $out/sonarqube/extensions/downloads
 
       # Wrap with JRE.
       makeWrapper $out/sonarqube/bin/sonar.sh $out/bin/sonarqube \

@@ -34,11 +34,12 @@ stdenv.mkDerivation rec {
 
       # Store the pid in /tmp instead of /nix/store (which is read-only so it fails to start).
       substituteInPlace $out/sonarqube/bin/sonar.sh \
-        --replace "PIDFILE=\"./" "PIDFILE=\"/tmp/"
+        --replace "PIDFILE=\"./" "PIDFILE=\"/tmp/" \
+        --replace "../../logs/nohup.log" "/tmp/sonar-nohup.log"
 
       # Wrap with JRE.
       makeWrapper $out/sonarqube/bin/sonar.sh $out/bin/sonarqube \
-        --prefix SONAR_JAVA_PATH : ${openjdk17}/bin/java;
+        --prefix SONAR_JAVA_PATH : ${openjdk17}/bin/java
   '';
 
 }

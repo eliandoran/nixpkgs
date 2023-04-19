@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
         else "echo 'architecture not yet supported'; exit -1;"}
       sed -i s=/usr/bin/ps=${procps}/bin/ps= $out/sonarqube/bin/sonar.sh
 
+      # Store the pid in /tmp instead of /nix/store (which is read-only so it fails to start).
+      substituteInPlace $out/sonarqube/bin/sonar.sh \
+        --replace "PIDFILE=\"./" "PIDFILE=\"/tmp/"
+
       # Wrap with JRE.
       makeWrapper $out/sonarqube/bin/sonar.sh $out/bin/sonarqube \
         --prefix SONAR_JAVA_PATH : ${openjdk17}/bin/java;

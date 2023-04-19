@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
         --replace "LIB_DIR=\"../../lib\"" "LIB_DIR=\"$out/sonarqube/lib\"" \
         --replace "../../logs/nohup.log" "/tmp/sonar-nohup.log"
 
+      # Change default configuration
+      substituteInPlace $out/sonarqube/conf/sonar.properties \
+        --replace "#sonar.path.temp=temp" "sonar.path.temp=/tmp/sonar"
+
       # Wrap with JRE.
       makeWrapper $out/sonarqube/bin/sonar.sh $out/bin/sonarqube \
         --prefix SONAR_JAVA_PATH : ${openjdk17}/bin/java

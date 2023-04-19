@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, procps }:
+{ stdenv, fetchurl, unzip, makeWrapper, procps, openjdk17 }:
 
 stdenv.mkDerivation rec {
 
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    makeWrapper
+  ];
+
+  buildInputs = [
+    openjdk17
   ];
 
   unpackPhase = ''
@@ -19,13 +24,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-      mkdir -p $out
+      mkdir -p $out/sonarqube
       cd ${pname}-${version}
-      cp -R conf extensions logs web data lib temp $out
-      ${if stdenv.isi686 then "cp -R bin/linux-x86-32 $out/bin"
-        else if stdenv.isx86_64 then"cp -R bin/linux-x86-64 $out/bin"
+      cp -R conf extensions logs web data lib temp $out/sonarqube
+      ${if stdenv.isi686 then "cp -R bin/linux-x86-32 $out/sonarqube/bin"
+        else if stdenv.isx86_64 then"cp -R bin/linux-x86-64 $out/sonarqube/bin"
         else "echo 'architecture not yet supported'; exit -1;"}
-      sed -i s=/usr/bin/ps=${procps}/bin/ps= $out/bin/sonar.sh
+      sed -i s=/usr/bin/ps=${procps}/bin/ps= $out/sonarqube/bin/sonar.sh
+
+      # Wrap with JRE.
+      makeWrapper $out/sonarqube/bin/sonar.sh $out/bin/sonarqube \
+        --prefix SONAR_JAVA_PATH : ${openjdk17}/bin/java;
   '';
 
 }

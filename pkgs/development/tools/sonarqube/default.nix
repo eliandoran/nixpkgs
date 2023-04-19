@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
       # Change default configuration
       substituteInPlace $out/sonarqube/conf/sonar.properties \
+        --replace "#sonar.path.data=data" "sonar.path.data=/tmp/sonar-data" \
         --replace "#sonar.path.temp=temp" "sonar.path.temp=/tmp/sonar"
 
       # Wrap with JRE.

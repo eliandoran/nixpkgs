@@ -12295,6 +12295,8 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+  sonarqube = callPackage ../development/tools/sonarqube { };
+
   spicy = callPackage ../development/tools/spicy { };
 
   spire = callPackage ../tools/security/spire { };

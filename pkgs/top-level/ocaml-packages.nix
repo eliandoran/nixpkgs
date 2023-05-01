@@ -209,9 +209,13 @@ let
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
+    cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
+
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
+
+    cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
     coin =  callPackage ../development/ocaml-modules/coin { };
 
@@ -1623,6 +1627,8 @@ let
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
     unionFind = callPackage ../development/ocaml-modules/unionFind { };
+
+    unisim_archisec = callPackage ../development/ocaml-modules/unisim_archisec { };
 
     unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
 

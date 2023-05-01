@@ -72,18 +72,6 @@ let
       meta.platforms = lib.attrNames sha256s;
     };
 
-  commonBuildInputs = extraBuildInputs: [
-    boehmgc
-    pcre
-    pcre2
-    libevent
-    libyaml
-    zlib
-    libxml2
-    openssl
-  ] ++ extraBuildInputs
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
-
   generic = (
     { version
     , sha256
@@ -92,7 +80,7 @@ let
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
-    lib.fix (compiler: stdenv.mkDerivation {
+    lib.fix (compiler: stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -172,7 +160,16 @@ let
 
       strictDeps = true;
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
-      buildInputs = commonBuildInputs extraBuildInputs;
+      buildInputs = [
+        boehmgc
+        (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
+        libevent
+        libyaml
+        zlib
+        libxml2
+        openssl
+      ] ++ extraBuildInputs
+      ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -202,7 +199,7 @@ let
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
           --suffix CRYSTAL_LIBRARY_PATH : ${
-            lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
+            lib.makeLibraryPath finalAttrs.buildInputs
           }
         install -dm755 $lib/crystal
         cp -r src/* $lib/crystal/
@@ -248,7 +245,7 @@ let
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
       };
-    })
+    }))
   );
 
 in
@@ -277,8 +274,8 @@ rec {
   };
 
   crystal_1_8 = generic {
-    version = "1.8.0";
-    sha256 = "sha256-oTvBKrfDkrpJg4gaOVrrKWfsqZC+Z9Lp/jt4ye+Iw/M=";
+    version = "1.8.1";
+    sha256 = "sha256-t+1vM1m62UftCvfa90Dg6nqt6Zseh/GP/Gc1VfOa4+c=";
     binary = binaryCrystal_1_2;
   };
 

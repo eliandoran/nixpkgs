@@ -34,7 +34,7 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
+    system = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
@@ -159,10 +159,7 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = {
-        #   "eurosign:e";
-        #   "caps:escape" # map caps to escape.
-        # };
+        # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;
@@ -180,7 +177,7 @@ in
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         #   packages = with pkgs; [
         #     firefox
-        #     thunderbird
+        #     tree
         #   ];
         # };
 

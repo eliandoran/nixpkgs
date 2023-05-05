@@ -1,12 +1,22 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
+{ lib
+, stdenv
+, borgbackup
+, coreutils
+, python3Packages
+, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, installShellFiles
+, borgmatic
+, testers
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.6";
+  version = "1.7.9";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TNh0laNAyHkIZLC51hzchSIDvsHst2aPxoRdI6Mdr84=";
+    sha256 = "sha256-v3Qxwy7V6rqX90G4/Xp6mVTUkrqDXmudgh3th0GCjuk=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -31,14 +41,16 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd borgmatic \
       --bash <($out/bin/borgmatic --bash-completion)
-
+  '' + lib.optionalString enableSystemd ''
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
+    # there is another "sleep", so choose the one with the space after it
+    # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
     substitute sample/systemd/borgmatic.service \
                $out/lib/systemd/system/borgmatic.service \
                --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
                --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-               --replace sleep ${coreutils}/bin/sleep
+               --replace "sleep " "${coreutils}/bin/sleep "
   '';
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };

@@ -2,19 +2,18 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-
 , openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.57.1";
+  version = "0.61.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NACasOoCABoHmb4U5LvQ8EPO7G10A7uQtX4th/WJqrw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ey0g7iog7PHxqgVaJROA2Myi4hGRe14RuA8tBTSc7Ok=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,12 +25,17 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
   proxyVendor = true;
 
-  vendorHash = "sha256-DLY0tcacGFcP17IqUVvpVkUjd2xQMO5JZxltmL4b+Wo=";
+  vendorHash = "sha256-NMKdMW/DRod/C5nL8GZR0pKTRzF58dARoWQD1o+i3Y4=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    openssl
   ];
 
   subPackages = [ "." ];
@@ -55,7 +59,6 @@ buildGoModule rec {
     ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  nativeCheckInputs = [ openssl ];
   preCheck = ''
     # test all dirs (except excluded)
     unset subPackages

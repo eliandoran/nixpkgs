@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.5";
+  version = "0.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-xXSZ9qxjmeIyYIWQubJbJxkXUdOu/WSSBddIWsVaH8k=";
+    hash = "sha256-xlrG2FF55qDsrkdSqCBLu3/QLtZs48ZUB90B2CemY64=";
   };
 
   postPatch = ''
@@ -84,11 +84,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     webob
-  ] ++ passthru.optional-dependencies.flask
-  ++ passthru.optional-dependencies.falcon
-  ++ passthru.optional-dependencies.django
-  ++ passthru.optional-dependencies.starlette
-  ++ passthru.optional-dependencies.requests;
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
     # Requires secrets and additional configuration

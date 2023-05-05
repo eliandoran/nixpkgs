@@ -24,16 +24,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.38.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-XZ0S6cps3WIMqWUHivXPKSN2PiZsSEmETnu9sglwXKw=";
+    hash = "sha256-1+s4AqvDfeTxZcM3w2VPUY1oSStNBXs0x//t3X7/zAw=";
   };
 
-  vendorHash = "sha256-MsMwBBualAwJzCrv/WNBJakv6LcKZYsDUqkNmivUMOQ=";
+  vendorHash = "sha256-SSz4oHUgfMRbvpdIl1xepfckef1HDA1y646FWnyBp6o=";
 
   outputs = [ "out" "man" ];
 
@@ -66,6 +66,8 @@ buildGoModule rec {
     installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/

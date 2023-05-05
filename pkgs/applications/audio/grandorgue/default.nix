@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.9.5-1";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-5OqTQBOYE6XU3BRiVwXOHrn22bVZzIIeZI8pgsWxhPw=";
+    sha256 = "sha256-l1KqER/vkNwgKLXIFUzHnYLw2ivGNP7hRiKhIOzn7pw=";
   };
 
   postPatch = ''

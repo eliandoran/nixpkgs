@@ -1,5 +1,6 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_16
+, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
@@ -17,7 +18,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_14;
+  llvmPackages = llvmPackages_16;
   stdenv = llvmPackages.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};
@@ -165,7 +166,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme

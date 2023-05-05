@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.89";
-    hash = "sha256-wlb6er8L2EaqgJbmbATBdSxx1BGcJXNcsu+/4UBmYdQ=";
+    version = "6.1.25";
+    hash = "sha256-Cn8NAVdfL2VJIPuZ3tANxB3VyQI0X2/YZG0/4r/ccYg=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.1.13";
-    hash = "sha256-H3bEKPzwqpeDWlsj3ciP5D8NXVBvi+oKisWXveHnjLQ=";
+    version = "6.2.12";
+    hash = "sha256-K/s1nSLOrzZ/A3pnv9qFs8SkI9R6keG0WGV1o7K6jUQ=";
     variant = "main";
   };
 
@@ -33,11 +33,6 @@ let
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
 
-      # Multigenerational LRU framework
-      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
-      LRU_GEN = yes;
-      LRU_GEN_ENABLED = yes;
-
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
@@ -57,7 +52,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

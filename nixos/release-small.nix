@@ -1,7 +1,11 @@
 # This jobset is used to generate a NixOS channel that contains a
 # small subset of Nixpkgs, mostly useful for servers that need fast
 # security updates.
-
+#
+# Individual jobs can be tested by running:
+#
+#   nix-build nixos/release-small.nix -A <jobname>
+#
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ] # no i686-linux
@@ -81,7 +85,8 @@ in rec {
       stdenv
       subversion
       tarball
-      vim;
+      vim
+      tests-stdenv-gcc-stageCompare;
   };
 
   tested = let
@@ -118,7 +123,6 @@ in rec {
         "nixos.tests.ipv6"
         "nixos.tests.login"
         "nixos.tests.misc"
-        "nixos.tests.nat.firewall-conntrack"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
         "nixos.tests.nfs3.simple"
@@ -132,6 +136,7 @@ in rec {
         "nixos.tests.proxy"
         "nixos.tests.simple"
         "nixpkgs.jdk"
+        "nixpkgs.tests-stdenv-gcc-stageCompare"
       ])
     ];
   };

@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "73.0.0";
+  version = "75.0.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "HGoT3t/ooRMiyjUkHnvVGOB04IU5U8VEKDixhE57kR8=";
+    sha256 = "c3I2ULSvKBTYIm1chVHPkaV0TxblLglBjzeUJ5TRmGw=";
   };
 
   nativeBuildInputs = [

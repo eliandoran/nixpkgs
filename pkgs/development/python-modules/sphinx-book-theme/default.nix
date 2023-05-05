@@ -4,13 +4,12 @@
 , fetchPypi
 , sphinx
 , pydata-sphinx-theme
-, pyyaml
 , jupyter-book
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "1.0.0rc2";
+  version = "1.0.1";
 
   format = "wheel";
 
@@ -21,13 +20,12 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    sha256 = "43977402f55b79706e117c6de6f50e67dac6dad698eb9b75be07dc2e6a689bde";
+    hash = "sha256-0V+CSLNxippr4LphejLRWR+fo5xhRGm/rOd3uganO3U=";
   };
 
   propagatedBuildInputs = [
-    sphinx
     pydata-sphinx-theme
-    pyyaml
+    sphinx
   ];
 
   pythonImportsCheck = [

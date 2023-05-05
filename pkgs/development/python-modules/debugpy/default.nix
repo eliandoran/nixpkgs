@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
 , substituteAll
 , gdb
@@ -13,29 +14,26 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.6";
+  version = "1.6.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Currently doesn't support 3.11:
+  # https://github.com/microsoft/debugpy/issues/1107
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
+    hash = "sha256-porQTFvcLaIkvhWPM4vWR0ohlcFRkRwSLpQJNg25Tj4=";
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
@@ -51,6 +49,18 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-gdb.patch;
+      inherit gdb;
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-lldb.patch;
+      inherit (llvmPackages) lldb;
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -96,6 +106,11 @@ buildPythonPackage rec {
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+  ];
 
   pythonImportsCheck = [
     "debugpy"

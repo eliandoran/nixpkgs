@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, runCommand
 , rustPlatform
 , openssl
 , zlib
@@ -16,43 +14,45 @@
 , Security
 , nghttp2
 , libgit2
-, withExtraFeatures ? true
+, doCheck ? true
+, withDefaultFeatures ? true
+, additionalFeatures ? (p: p)
 , testers
 , nushell
 , nix-update-script
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "nushell";
-  version = "0.75.0";
+rustPlatform.buildRustPackage (
+  let
+    version =  "0.79.0";
+    pname = "nushell";
+  in {
+  inherit version pname;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-u8/SvuR/RpJaBX4Dr3Onrk0AVpIAeVb+399+NUpgkfI=";
+    hash = "sha256-vnOTSXTgFxNTI4msgMQ/5E27VUKPj6nBIqPWLUeXAr4=";
   };
 
-  cargoSha256 = "sha256-hnSumfZd9ylEx3dkTGW2s4VSv107MHOn21ytOcimhPw=";
-
-  # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
+  cargoHash = "sha256-FqhN1t3n6j5czZ40JUFtsz4ZxTl7vpMTBhrR66M1DNw=";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
     ++ lib.optionals stdenv.isDarwin [ zlib libiconv Libsystem Security ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  buildFeatures = lib.optional withExtraFeatures "extra";
+  buildFeatures = additionalFeatures [ (lib.optional withDefaultFeatures "default") ];
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
   # outside of TMPDIR
-  doCheck = ! stdenv.isDarwin;
+  doCheck = doCheck && !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     };
     updateScript = nix-update-script { };
   };
-}
+})

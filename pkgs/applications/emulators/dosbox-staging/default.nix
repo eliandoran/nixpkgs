@@ -1,10 +1,16 @@
-{ alsa-lib
-, copyDesktopItems
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
+, SDL2
+, SDL2_image
+, SDL2_net
+, alsa-lib
+, copyDesktopItems
 , fluidsynth
 , glib
 , gtest
-, lib
+, iir1
 , libGL
 , libGLU
 , libjack2
@@ -20,24 +26,38 @@
 , ninja
 , opusfile
 , pkg-config
-, irr1
-, SDL2
-, SDL2_image
-, SDL2_net
 , speexdsp
-, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
   version = "0.80.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "dosbox-staging";
+    repo = "dosbox-staging";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
+
+  patches = [
+    # Pull missind SDL2_net dependency:
+    #   https://github.com/dosbox-staging/dosbox-staging/pull/2358
+    (fetchpatch {
+      name = "sdl2-net.patch";
+      url = "https://github.com/dosbox-staging/dosbox-staging/commit/1b02f187a39263f4b0285323dcfe184bccd749c2.patch";
+      hash = "sha256-Ev97xApInu6r5wvI9Q7FhkSXqtMW/rwJj48fExvqnT0=";
+    })
+
+    # Pull missing SDL2_image dependency:
+    #   https://github.com/dosbox-staging/dosbox-staging/pull/2239
+    (fetchpatch {
+      name = "sdl2-image.patch";
+      url = "https://github.com/dosbox-staging/dosbox-staging/commit/ca8b7a906d29a3f8ce956c4af7dc829a6ac3e229.patch";
+      hash = "sha256-WtTVSWWSlfXrdPVsnlDe4P5K/Fnj4QsOzx3Wo/Kusmg=";
+      includes = [ "src/gui/meson.build" ];
+    })
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -52,7 +72,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     fluidsynth
     glib
-    irr1
+    iir1
     libGL
     libGLU
     libjack2
@@ -67,11 +87,6 @@ stdenv.mkDerivation rec {
     SDL2_image
     SDL2_net
     speexdsp
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${SDL2_image}/include/SDL2"
-    "-I${SDL2_net}/include/SDL2"
   ];
 
   desktopItems = [
@@ -91,17 +106,16 @@ stdenv.mkDerivation rec {
     # original dosbox. Doing it this way allows us to work with frontends and
     # launchers that expect the binary to be named dosbox, but get out of the
     # way of vanilla dosbox if the user desires to install that as well.
-    mv $out/bin/dosbox $out/bin/${pname}
+    mv $out/bin/dosbox $out/bin/dosbox-staging
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
 
-    # Create a symlink to dosbox manual instead of merely copying it
+    # Create a symlink to dosbox manual instead of copying it
     pushd $out/share/man/man1/
-    mv dosbox.1.gz ${pname}.1.gz
-    ln -s ${pname}.1.gz dosbox.1.gz
+    ln -s dosbox.1.gz dosbox-staging.1.gz
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dosbox-staging.github.io/";
     description = "A modernized DOS emulator";
     longDescription = ''
@@ -110,10 +124,10 @@ stdenv.mkDerivation rec {
       existing DOSBox codebase while leveraging modern development tools and
       practices.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ joshuafern AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ joshuafern AndersonTorres ];
+    platforms = lib.platforms.unix;
     priority = 101;
   };
-}
+})
 # TODO: report upstream about not finding SDL2_net

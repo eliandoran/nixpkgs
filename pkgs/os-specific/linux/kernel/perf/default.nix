@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libtraceevent
 , openssl
 , systemtap
 , numactl
@@ -63,6 +64,10 @@ stdenv.mkDerivation {
     # Linux scripts
     patchShebangs scripts
 
+  '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
+    # perf-specific scripts
+    patchShebangs tools/perf/pmu-events
+  '' + ''
     cd tools/perf
 
     for x in util/build-id.c util/dso.c; do
@@ -105,6 +110,7 @@ stdenv.mkDerivation {
     elfutils
     newt
     slang
+    libtraceevent
     libunwind
     zlib
     openssl

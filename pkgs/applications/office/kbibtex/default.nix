@@ -5,10 +5,10 @@
 , extra-cmake-modules
 , shared-mime-info
 # Qt
-, qtnetworkauth
 , qtxmlpatterns
 , qtwebengine
 , qca-qt5
+, qtnetworkauth
 # KDE
 , ki18n
 , kxmlgui
@@ -29,13 +29,13 @@
 
 mkDerivation rec {
   pname = "kbibtex";
-  version = "0.9.3.1";
+  version = "0.10.0";
 
   src = let
     majorMinorPatch = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   in fetchurl {
     url = "mirror://kde/stable/KBibTeX/${majorMinorPatch}/kbibtex-${version}.tar.xz";
-    hash = "sha256-kH/E5xv9dmzM7WrIMlGCo4y0Xv/7XHowELJP3OJz8kQ=";
+    hash = "sha256-sSeyQKfNd8U4YZ3IgqOZs8bM13oEQopJevkG8U0JuMQ=";
   };
 
   nativeBuildInputs = [
@@ -44,10 +44,10 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtnetworkauth
     qtxmlpatterns
     qtwebengine
     qca-qt5
+    qtnetworkauth
     # TODO qtoauth
     ki18n
     kxmlgui
@@ -74,5 +74,6 @@ mkDerivation rec {
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

@@ -154,6 +154,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Guest memory size
+  memSize ? 1024
+
 , # Copy the contents of the Nix store to the root of the image and
   # skip further setup. Incompatible with `contents`,
   # `installBootLoader` and `configFile`.
@@ -399,11 +402,16 @@ let format' = format; in let
         done
       else
         mkdir -p $root/$(dirname $target)
-        if ! [ -e $root/$target ]; then
-          rsync $rsync_flags $source $root/$target
-        else
+        if [ -e $root/$target ]; then
           echo "duplicate entry $target -> $source"
           exit 1
+        elif [ -d $source ]; then
+          # Append a slash to the end of source to get rsync to copy the
+          # directory _to_ the target instead of _inside_ the target.
+          # (See `man rsync`'s note on a trailing slash.)
+          rsync $rsync_flags $source/ $root/$target
+        else
+          rsync $rsync_flags $source $root/$target
         fi
       fi
     done
@@ -525,7 +533,7 @@ let format' = format; in let
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
         ]
       );
-      memSize = 1024;
+      inherit memSize;
     } ''
       export PATH=${binPath}:$PATH
 

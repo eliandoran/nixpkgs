@@ -20,7 +20,7 @@ let
 in
   buildPythonPackage rec {
     pname = "yaramod";
-    version = "3.12.2";
+    version = "3.19.1";
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ in
       owner = "avast";
       repo = pname;
       rev = "refs/tags/v${version}";
-      hash = "sha256-1q+lzNtm8qko9ZAxJjkmPOQjHD5GxB6YyEz0tr+QWGk=";
+      hash = "sha256-HYagARlppQpM43ND/CkLL0iHmOmhl/wBDGVlJyOc9dU=";
     };
 
     postPatch = ''

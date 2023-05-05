@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     gobject-introspection
     vala
+    gnutls
     gtk-doc
     python3
   ];
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Library for reading and writing Jcat files";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

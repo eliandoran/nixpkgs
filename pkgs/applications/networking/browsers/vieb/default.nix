@@ -1,25 +1,24 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, nix-update-script, lib }:
 
-let
-  srcInfo = builtins.fromJSON (builtins.readFile ./pin.json);
-in
-mkYarnPackage rec {
+buildNpmPackage rec {
   pname = "vieb";
-  inherit (srcInfo) version;
+  version = "9.7.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    inherit (srcInfo) sha256;
+    hash = "sha256-uo5V5RRDSR+f9+AqojikrlybmtcWTmB7TPXEvLG9n4E=";
   };
 
-  packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" ];
+  postPatch = ''
+    sed -i '/"electron"/d' package.json
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  npmDepsHash = "sha256-RUpeqbb8bnSQ6sCYH8O9mL3Rpb+ZlcPi7fq6LlbkSic=";
+  dontNpmBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;
 
   desktopItem = makeDesktopItem {
     name = "vieb";
@@ -37,25 +36,22 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
-    unlink $out/libexec/vieb/deps/vieb/node_modules
-    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
-
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
-    pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
+    pushd $out/lib/node_modules/vieb/app/img/icons
     for file in *.png; do
       install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/vieb.png
     done
     popd
 
     makeWrapper ${electron}/bin/electron $out/bin/vieb \
-      --add-flags $out/libexec/vieb/node_modules/vieb/app \
+      --add-flags $out/lib/node_modules/vieb/app \
       --set npm_package_version ${version}
   '';
 
   distPhase = ":"; # disable useless $out/tarballs directory
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://vieb.dev/";

@@ -2893,6 +2893,8 @@ with pkgs;
 
   goku = callPackage ../os-specific/darwin/goku { };
 
+  hexfiend = callPackage ../os-specific/darwin/hexfiend { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */

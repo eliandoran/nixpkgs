@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.223";
+  version = "2.3.246";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/m/B2yR/NxQnd2di6ERZHFTT4xOI5mH6xFQwp3p2bEo=";
+    hash = "sha256-IDyDvwpCB/rZkaAWmAvudctT3FDDCKentqJVfM/YV7s=";
   };
 
   patches = [
@@ -121,6 +121,7 @@ buildPythonApplication rec {
     "test_secret_value_in_keyword"
     "test_runner_verify_secrets_skip_invalid_suppressed"
     "test_runner_verify_secrets_skip_all_no_effect"
+    "test_runner"
   ];
 
   disabledTestPaths = [

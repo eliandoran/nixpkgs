@@ -22,7 +22,6 @@ in nodePackages.package.override {
 
     cat <<EOF > $out/bin/tuya-mqtt
     #!/bin/sh
-    pwd
     exec ${nodejs}/bin/node $out/lib/node_modules/tuya-mqtt/tuya-mqtt.js "\$@"
     EOF
 

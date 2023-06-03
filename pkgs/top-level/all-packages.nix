@@ -19426,6 +19426,8 @@ with pkgs;
 
   ttyd = callPackage ../servers/ttyd { };
 
+  tuya-mqtt = callPackage ../servers/tuya-mqtt { };
+
   turbogit = callPackage ../development/tools/turbogit {
     libgit2 = libgit2_1_3_0;
   };

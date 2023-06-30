@@ -1859,6 +1859,8 @@ self: super: with self; {
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+  click-aliases = callPackage ../development/python-modules/click-aliases { };
+
   click-command-tree = callPackage ../development/python-modules/click-command-tree { };
 
   click-completion = callPackage ../development/python-modules/click-completion { };
@@ -3319,8 +3321,6 @@ self: super: with self; {
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
   evaluate = callPackage ../development/python-modules/evaluate { };
-
-  ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
 
   evdev = callPackage ../development/python-modules/evdev { };
 
@@ -7729,6 +7729,8 @@ self: super: with self; {
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
+  python-ipware = callPackage ../development/python-modules/python-ipware { };
+
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
@@ -9739,6 +9741,8 @@ self: super: with self; {
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-ethtool = callPackage ../development/python-modules/python-ethtool { };
+
+  python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
   python_fedora = callPackage ../development/python-modules/python_fedora { };
 
@@ -12054,6 +12058,8 @@ self: super: with self; {
   tifffile = callPackage ../development/python-modules/tifffile { };
 
   tika = callPackage ../development/python-modules/tika { };
+
+  tika-client = callPackage ../development/python-modules/tika-client { };
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 

@@ -3,7 +3,7 @@ let
   versions = if stdenv.isLinux then {
     stable = "0.0.27";
     ptb = "0.0.43";
-    canary = "0.0.161";
+    canary = "0.0.162";
     development = "0.0.217";
   } else {
     stable = "0.0.273";
@@ -24,7 +24,7 @@ let
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-jX7+tDACTzDqDIzL2VuQPHcdMBth6wbHJ4zfVJJmJ68=";
+        sha256 = "sha256-eSWcwSw46hKJmDLxHtolBZgKrIS2QnTbVoYe0EI4Njs=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
@@ -59,7 +59,7 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ MP2E artturin infinidoge jopejoe1 ];
+    maintainers = with maintainers; [ MP2E Scrumplex artturin infinidoge jopejoe1 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
   package =

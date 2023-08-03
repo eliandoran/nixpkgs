@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.5.5";
+  version = "9.5.7";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    hash = "sha256-e3ltyd5jp2p7SK3vUTfBia/PrHpN2FFeHXeHlkXhsKg=";
+    hash = "sha256-QrHg4B2+9XCMaW7l1AWClQMxbT0Rhbb++5ELL7kdqOw=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-P6jlUiWtt+Wx80MiNhWz87x0E4cZTiiByAZPQ5yQFcw=";
+    hash = "sha256-Bv2vbju3VKXJTTzjhXCzYgng8i1RnQyM73s+XcJAmp8=";
   };
 
-  vendorHash = "sha256-E9Qdsk691+laPrQQnYBIwxAIbXh7wxB0G2e/Vp+4x98=";
+  vendorHash = "sha256-Fn+YDE7DAdgmRIfKMD8n9KYayqvKt5kUzY2K6tL/CqY=";
 
   nativeBuildInputs = [ wire ];
 

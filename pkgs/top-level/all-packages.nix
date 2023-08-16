@@ -1797,6 +1797,8 @@ with pkgs;
 
   yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
 
+  zsh-history-to-fish = callPackage ../tools/misc/zsh-history-to-fish { };
+
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
@@ -6194,7 +6196,9 @@ with pkgs;
 
   cdpr = callPackage ../tools/networking/cdpr { };
 
-  cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
+  cdrdao = callPackage ../tools/cd-dvd/cdrdao {
+    inherit (darwin.apple_sdk.frameworks) CoreServices IOKit;
+  };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
@@ -6495,6 +6499,8 @@ with pkgs;
   artim-dark = callPackage ../data/themes/artim-dark { };
 
   bbin = callPackage ../development/tools/bbin { };
+
+  blacken-docs = callPackage ../tools/misc/blacken-docs { };
 
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
@@ -10483,6 +10489,8 @@ with pkgs;
   nomino = callPackage ../tools/misc/nomino { };
 
   nb = callPackage ../tools/misc/nb { };
+
+  nbqa = callPackage ../tools/misc/nbqa { };
 
   kb = callPackage ../tools/misc/kb { };
 
@@ -16712,6 +16720,8 @@ with pkgs;
   vlang = callPackage ../development/compilers/vlang { };
 
   vala-lint = callPackage ../development/tools/vala-lint { };
+
+  vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_48

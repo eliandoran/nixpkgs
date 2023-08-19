@@ -58,12 +58,6 @@
     patch = ./export-rt-sched-migrate.patch;
   };
 
-  # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/patch/?id=39bf07d812b888b23983a9443ad967ca9b61551d
-  make-maple-state-reusable-after-mas_empty_area = {
-    name = "make-maple-state-reusable-after-mas_empty_area";
-    patch = ./make-maple-state-reusable-after-mas_empty_area.patch;
-  };
-
   fix-em-ice-bonding = {
     name = "fix-em-ice-bonding";
     patch = ./fix-em-ice-bonding.patch;
@@ -75,6 +69,14 @@
       name = name + ".patch";
       url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
       hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
+    };
+  };
+
+  fix-amdgpu-5_15 = {
+    name = "fix-amdgpu-crash";
+    patch = fetchpatch {
+      url = "https://lore.kernel.org/stable/20230628111636.23300-1-mario.limonciello@amd.com/raw";
+      sha256 = "sha256-eAzy+bMiOJwzssOuvrMu7gmmV3PZezaDuVwwx7zNt6M=";
     };
   };
 }

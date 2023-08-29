@@ -41,17 +41,21 @@ let
       categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
-    postPatch = ''
+    postPatch = lib.optionalString stdenv.isLinux ''
       addAutoPatchelfSearchPath ${jre8}/lib/openjdk/jre/lib/
       autoPatchelf lib
-
+    '' + ''
       # Nix cannot see the runtime references to the paths we just patched in
       # once they've been compressed into the .jar. Scan for and remember them
       # as plain text so they don't get overlooked.
       find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
+    nativeBuildInputs = [
+      makeWrapper unzip
+    ] ++ lib.optionals stdenv.isLinux [
+      autoPatchelfHook
+    ];
     buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
 
     buildPhase = ''
@@ -101,7 +105,7 @@ let
       inherit description;
       inherit license;
       maintainers = [ lib.maintainers.edwtjo ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
     };
   };
 

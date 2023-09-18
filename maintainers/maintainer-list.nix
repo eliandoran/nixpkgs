@@ -5846,6 +5846,12 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  gmemstr = {
+    email = "git@gmem.ca";
+    github = "gmemstr";
+    githubId = 1878840;
+    name = "Gabriel Simmer";
+  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
@@ -8301,6 +8307,12 @@
     github = "kfollesdal";
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
+  };
+  khaneliman = {
+    email = "khaneliman12@gmail.com";
+    github = "khaneliman";
+    githubId = 1778670;
+    name = "Austin Horstman";
   };
   kho-dialga = {
     email = "ivandashenyou@gmail.com";
@@ -15091,12 +15103,6 @@
     keys = [{
       fingerprint = "5D8B FA8B 286A C2EF 6EE4  8598 F742 B72C 8926 1A51";
     }];
-  };
-  stepech = {
-    name = "stepech";
-    github = "stepech";
-    githubId = 29132060;
-    matrix = "@stepech:matrix.org";
   };
   stephank = {
     email = "nix@stephank.nl";

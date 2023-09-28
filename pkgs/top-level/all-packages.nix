@@ -6772,8 +6772,6 @@ with pkgs;
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
-  debianutils = callPackage ../tools/misc/debianutils { };
-
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
 
   debian-goodies = callPackage ../applications/misc/debian-goodies { };
@@ -14873,11 +14871,15 @@ with pkgs;
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
-  flutter37-unwrapped = flutterPackages.v37;
-  flutter2-unwrapped = flutterPackages.v2;
+  flutter37-unwrapped = let flutter =flutterPackages.v37;
+  in flutter // { meta = flutter.meta // { insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
+  flutter2-unwrapped = let flutter = flutterPackages.v2;
+  in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
-  flutter37 = flutterPackages.wrapFlutter flutter37-unwrapped;
-  flutter2 = flutterPackages.wrapFlutter flutter2-unwrapped;
+  flutter37 = let flutter = flutterPackages.wrapFlutter flutter37-unwrapped;
+  in flutter // { meta = flutter.meta // { insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
+  flutter2 = let flutter = flutterPackages.wrapFlutter flutter2-unwrapped;
+  in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -27099,6 +27101,8 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_4_hardened = linuxKernel.packages.linux_6_4_hardened;
   linux_6_4_hardened = linuxKernel.kernels.linux_6_4_hardened;
+  linuxPackages_6_5_hardened = linuxKernel.packages.linux_6_5_hardened;
+  linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;

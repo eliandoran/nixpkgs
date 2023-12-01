@@ -1,6 +1,6 @@
 let
   host = "127.0.0.1";
-  port = "6557";
+  port = 6557;
 in import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "librenms-agent";
 
@@ -11,14 +11,15 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     services.librenms-agent = {
       enable = true;
-      listenStream = [ "${host}:${port}" ];
+      port = port;
       ipAddressAllow = [ host ];
+      openFirewall = true;
     };
   };
 
   testScript = ''
     start_all()
     machine.wait_for_unit("sockets.target")
-    machine.succeed("telnet ${host} ${port} | grep AgentOS");
+    machine.succeed("telnet ${host} ${toString port} | grep AgentOS");
   '';
 })

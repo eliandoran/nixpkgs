@@ -10,13 +10,17 @@ in {
 
     package = mkPackageOption pkgs "librenms-agent" {};
 
-    listenStream = mkOption {
-      type = with types; listOf str;
-      default = [ "6556" ];
-      example = [ "192.168.1.1:6556" ];
-      description = mdDoc ''
-        Addresses/ports on which the LibreNMS Agent should listen to.
-        For detailed syntax see ListenStream in {manpage}`systemd.socket(5)`.
+    port = mkOption {
+      type = types.port;
+      default = 6556;
+      description = mdDoc "Port where the LibreNMS Agent will listen.";
+    };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open port for LibreNMS Agent.
       '';
     };
 
@@ -35,7 +39,7 @@ in {
       description = "Check_MK LibreNMS Agent Socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = cfg.listenStream;
+        ListenStream = toString cfg.port;
         Accept = "yes";
       };
     };
@@ -51,5 +55,7 @@ in {
         IPAddressAllow = cfg.ipAddressAllow;
       };
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
   };
 }

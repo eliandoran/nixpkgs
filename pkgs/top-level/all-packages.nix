@@ -5882,6 +5882,8 @@ with pkgs;
 
   librenms = callPackage ../servers/monitoring/librenms { };
 
+  librenms-agent = callPackage ../servers/monitoring/librenms-agent { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   libz = callPackage ../development/libraries/libz { };

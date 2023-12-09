@@ -1,5 +1,12 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  config, cudaSupport ? config.cudaSupport, cudaPackages, magma,
+  config, cudaSupport ? config.cudaSupport, cudaPackages,
+  effectiveMagma ?
+  if cudaSupport then magma-cuda-static
+  else if rocmSupport then magma-hip
+  else magma,
+  magma,
+  magma-hip,
+  magma-cuda-static,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -48,10 +55,7 @@
 
 let
   inherit (lib) attrsets lists strings trivial;
-  inherit (cudaPackages) cudaFlags cudnn;
-
-  # Some packages are not available on all platforms
-  nccl = cudaPackages.nccl or null;
+  inherit (cudaPackages) cudaFlags cudnn nccl;
 
   setBool = v: if v then "1" else "0";
 
@@ -111,11 +115,11 @@ let
   };
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
-    "CUDA and ROCm are not mutually exclusive" = cudaSupport && rocmSupport;
+    "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
     "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
-    "Magma cudaPackages does not match cudaPackages" = cudaSupport && (magma.cudaPackages != cudaPackages);
+    "Magma cudaPackages does not match cudaPackages" = cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
   };
 in buildPythonPackage rec {
   pname = "torch";
@@ -202,10 +206,11 @@ in buildPythonPackage rec {
   # For more, see https://github.com/open-mpi/ompi/issues/7733#issuecomment-629806195.
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-    export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
-    export CUDNN_LIB_DIR=${cudnn.lib}/lib
     export CUPTI_INCLUDE_DIR=${cudaPackages.cuda_cupti.dev}/include
     export CUPTI_LIBRARY_DIR=${cudaPackages.cuda_cupti.lib}/lib
+  '' + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
+    export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
+    export CUDNN_LIB_DIR=${cudnn.lib}/lib
   '' + lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
@@ -263,7 +268,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (nccl != null);
+  USE_NCCL = setBool (cudaPackages ? nccl);
   USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
   USE_STATIC_NCCL = setBool useSystemNccl;
 
@@ -338,8 +343,6 @@ in buildPythonPackage rec {
       cuda_nvrtc.lib
       cuda_nvtx.dev
       cuda_nvtx.lib # -llibNVToolsExt
-      cudnn.dev
-      cudnn.lib
       libcublas.dev
       libcublas.lib
       libcufft.dev
@@ -350,7 +353,10 @@ in buildPythonPackage rec {
       libcusolver.lib
       libcusparse.dev
       libcusparse.lib
-    ] ++ lists.optionals (nccl != null) [
+    ] ++ lists.optionals (cudaPackages ? cudnn) [
+      cudnn.dev
+      cudnn.lib
+    ] ++ lists.optionals (useSystemNccl && cudaPackages ? nccl) [
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl.dev # Provides nccl.h AND a static copy of NCCL!
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
@@ -359,7 +365,7 @@ in buildPythonPackage rec {
       cuda_profiler_api.dev # <cuda_profiler_api.h>
     ])
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
+    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
     ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
 

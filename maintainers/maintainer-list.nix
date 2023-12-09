@@ -610,6 +610,12 @@
     githubId = 1229027;
     name = "Andreas Schrägle";
   };
+  ajwhouse = {
+    email = "adam@ajwh.chat";
+    github = "ajwhouse";
+    githubId = 56616368;
+    name = "Adam House";
+  };
   ak = {
     email = "ak@formalprivacy.com";
     github = "alexanderkjeldaas";
@@ -3152,6 +3158,11 @@
     github = "chessai";
     githubId = 18648043;
     name = "Daniel Cartwright";
+  };
+  chewblacka = {
+    github = "chewblacka";
+    githubId = 18430320;
+    name = "John Garcia";
   };
   Chili-Man = {
     email = "dr.elhombrechile@gmail.com";
@@ -8389,11 +8400,6 @@
     githubId = 31008330;
     name = "Jann Marc Villablanca";
   };
-  jgarcia = {
-    github = "chewblacka";
-    githubId = 18430320;
-    name = "John Garcia";
-  };
   jgart = {
     email = "jgart@dismail.de";
     github = "jgarte";
@@ -12163,7 +12169,7 @@
   moni = {
     email = "lythe1107@gmail.com";
     matrix = "@fortuneteller2k:matrix.org";
-    github = "moni";
+    github = "moni-dz";
     githubId = 20619776;
     name = "moni";
   };

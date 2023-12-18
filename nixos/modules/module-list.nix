@@ -340,6 +340,7 @@
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
+  ./services/audio/mympd.nix
   ./services/audio/navidrome.nix
   ./services/audio/networkaudiod.nix
   ./services/audio/roon-bridge.nix

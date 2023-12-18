@@ -2438,6 +2438,12 @@
     githubId = 37907;
     name = "Julian Stecklina";
   };
+  bloveless = {
+    email = "brennon.loveless@gmail.com";
+    github = "bloveless";
+    githubId = 535135;
+    name = "Brennon Loveless";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
@@ -17646,6 +17652,11 @@
     githubId = 7914437;
     name = "Thomas Cheronneau";
   };
+  tc-kaluza = {
+    github = "tc-kaluza";
+    githubId = 101565936;
+    name = "Tautvydas Cerniauskas";
+  };
   tckmn = {
     email = "andy@tck.mn";
     github = "tckmn";
@@ -18305,6 +18316,12 @@
     github = "toonn";
     githubId = 1486805;
     name = "Toon Nolten";
+  };
+  tornax = {
+    email = "tornax@pm.me";
+    github = "TornaxO7";
+    githubId = 50843046;
+    name = "tornax";
   };
   toschmidt = {
     email = "tobias.schmidt@in.tum.de";

@@ -61,7 +61,7 @@ with pkgs;
   };
 
   stdenvNoLibs =
-    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
+    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.useLLVM or false)
     then
       # We cannot touch binutils or cc themselves, because that will cause
       # infinite recursion. So instead, we just choose a libc based on the
@@ -1762,6 +1762,8 @@ with pkgs;
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
+
+  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
 
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
@@ -11211,7 +11213,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud25 nextcloud26 nextcloud27;
+    nextcloud25 nextcloud26 nextcloud27 nextcloud28;
 
   nextcloud25Packages = throw "Nextcloud25 is EOL!";
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
@@ -11219,6 +11221,9 @@ with pkgs;
   };
   nextcloud27Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/27.json;
+  };
+  nextcloud28Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/28.json;
   };
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
@@ -15667,6 +15672,7 @@ with pkgs;
   clang_14 = llvmPackages_14.clang;
   clang_15 = llvmPackages_15.clang;
   clang_16 = llvmPackages_16.clang;
+  clang_17 = llvmPackages_17.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_14;
@@ -15714,6 +15720,10 @@ with pkgs;
 
   clang-tools_16 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_16;
+  };
+
+  clang-tools_17 = callPackage ../development/tools/clang-tools {
+    llvmPackages = llvmPackages_17;
   };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
@@ -16220,6 +16230,7 @@ with pkgs;
 
   ghdl-llvm = callPackage ../development/compilers/ghdl {
     backend = "llvm";
+    inherit (llvmPackages_15) llvm;
   };
 
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
@@ -16615,6 +16626,7 @@ with pkgs;
   lld_14 = llvmPackages_14.lld;
   lld_15 = llvmPackages_15.lld;
   lld_16 = llvmPackages_16.lld;
+  lld_17 = llvmPackages_17.lld;
 
   lldb = lldb_14;
   lldb_6 = llvmPackages_6.lldb;
@@ -16628,6 +16640,7 @@ with pkgs;
   lldb_14 = llvmPackages_14.lldb;
   lldb_15 = llvmPackages_15.lldb;
   lldb_16 = llvmPackages_16.lldb;
+  lldb_17 = llvmPackages_17.lldb;
 
   llvm = llvmPackages.llvm;
   llvm_6  = llvmPackages_6.llvm;
@@ -16641,6 +16654,7 @@ with pkgs;
   llvm_14 = llvmPackages_14.llvm;
   llvm_15 = llvmPackages_15.llvm;
   llvm_16 = llvmPackages_16.llvm;
+  llvm_17 = llvmPackages_17.llvm;
 
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
@@ -16737,6 +16751,13 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_16.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_16.libraries or llvmPackages_16.libraries;
     targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
+  }));
+
+  llvmPackages_17 = recurseIntoAttrs (callPackage ../development/compilers/llvm/17 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_17.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_17.libraries or llvmPackages_17.libraries;
+    targetLlvm = targetPackages.llvmPackages_17.llvm or llvmPackages_17.llvm;
   }));
 
   lorri = callPackage ../tools/misc/lorri {
@@ -18508,9 +18529,10 @@ with pkgs;
   electron_22 = electron_22-bin;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
-  electron_25 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_25 then electron-source.electron_25 else electron_25-bin;
+  electron_25 = electron_25-bin;
   electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
+  electron_28 = electron-source.electron_28;
   electron = electron_27;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -28185,6 +28207,8 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_5_hardened = linuxKernel.packages.linux_6_5_hardened;
   linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
+  linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
+  linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -32529,7 +32553,9 @@ with pkgs;
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
-  indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
+  indiepass-desktop = callPackage ../by-name/in/indiepass-desktop/package.nix {
+    electron = electron_19;
+  };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
@@ -41425,7 +41451,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
 
-  wavm = callPackage ../development/interpreters/wavm { };
+  wavm = callPackage ../development/interpreters/wavm {
+    llvmPackages = llvmPackages_12;
+  };
 
   yabasic = callPackage ../development/interpreters/yabasic { };
 
@@ -42160,4 +42188,6 @@ with pkgs;
   code-maat = callPackage ../development/tools/code-maat {};
 
   mdhtml = callPackage ../tools/text/mdhtml { };
+
+  insulator2 = callPackage ../applications/misc/insulator2 {};
 }

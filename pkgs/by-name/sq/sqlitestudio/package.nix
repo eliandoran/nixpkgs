@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, libsForQt5, makeWrapper, readline }:
+{ stdenv, fetchFromGitHub, pkg-config, libsForQt5, readline }:
 
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    makeWrapper
     pkg-config
     libsForQt5.wrapQtAppsHook
     libsForQt5.qmake

@@ -1528,6 +1528,8 @@ with pkgs;
 
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
+  dualsensectl = callPackage ../tools/games/dualsensectl { };
+
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
@@ -4765,7 +4767,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_26;
+    electron = electron_27;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -9445,6 +9447,10 @@ with pkgs;
   };
 
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-footnote = callPackage ../tools/text/mdbook-footnote {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -27112,6 +27118,8 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_5_hardened = linuxKernel.packages.linux_6_5_hardened;
   linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
+  linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
+  linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;

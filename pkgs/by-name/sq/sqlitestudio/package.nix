@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, libsForQt5, readline }:
+{ lib, stdenv, fetchFromGitHub, libsForQt5,
+readline, tcl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";
@@ -16,13 +17,15 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qttools
     readline
+    tcl
   ];
 
   buildPhase = ''
     qmake SQLiteStudio3/SQLiteStudio3.pro
     make
 
-    qmake Plugins/Plugins.pro
+    qmake Plugins/Plugins.pro \
+      "DEFINES += PYTHON_VERSION=${python3.pythonVersion}"
     make
   '';
 

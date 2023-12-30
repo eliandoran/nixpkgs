@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     libsForQt5.qmake
   ];
 
-  qmakeFlags = [
-    "SQLiteStudio3/SQLiteStudio3.pro"
+  patches = [
+    ./0001-Add-global-pro.patch
   ];
 
 }

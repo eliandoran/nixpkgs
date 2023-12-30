@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libsForQt5, readline }:
+{ lib, stdenv, fetchFromGitHub, libsForQt5, readline }:
 
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";
@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
     readline
   ];
 
+  buildPhase = ''
+    qmake SQLiteStudio3/SQLiteStudio3.pro
+    make
+
+    qmake Plugins/Plugins.pro
+    make
+  '';
+
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
     libsForQt5.qmake
@@ -26,5 +34,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-Add-global-pro.patch
   ];
+
+  meta = {
+    description = "A free, open source, multi-platform SQLite database manager.";
+    homepage = "https://sqlitestudio.pl";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eliandoran ];
+    platforms = [ "x86_64-linux" ];
+  };
 
 }

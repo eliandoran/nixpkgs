@@ -25,13 +25,15 @@ stdenv.mkDerivation rec {
     make
 
     qmake Plugins/Plugins.pro \
-      "DEFINES += PYTHON_VERSION=${python3.pythonVersion}"
+      "DEFINES += PYTHON_VERSION=${python3.pythonVersion}" \
+      "INCLUDEPATH += ${python3}/include/${python3.libPrefix}"
     make
   '';
 
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
     libsForQt5.qmake
+    python3
   ];
 
   patches = [

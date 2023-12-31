@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, libsForQt5,
-readline, tcl, python38, libxcrypt }:
+readline, tcl, python39, libxcrypt }:
 
 let
-  python = python38;
+  python = python39;
 in stdenv.mkDerivation rec {
   pname = "sqlitestudio";
   version = "3.4.4";
@@ -25,7 +25,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
-    libsForQt5.qmake
     python
   ];
 

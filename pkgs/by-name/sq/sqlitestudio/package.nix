@@ -1,7 +1,9 @@
 { lib, stdenv, fetchFromGitHub, libsForQt5,
-readline, tcl, python3 }:
+readline, tcl, python38, libxcrypt }:
 
-stdenv.mkDerivation rec {
+let
+  python = python38;
+in stdenv.mkDerivation rec {
   pname = "sqlitestudio";
   version = "3.4.4";
 
@@ -18,6 +20,13 @@ stdenv.mkDerivation rec {
     libsForQt5.qttools
     readline
     tcl
+    libxcrypt
+  ];
+
+  nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
+    python
   ];
 
   buildPhase = ''
@@ -25,20 +34,10 @@ stdenv.mkDerivation rec {
     make
 
     qmake Plugins/Plugins.pro \
-      "DEFINES += PYTHON_VERSION=${python3.pythonVersion}" \
-      "INCLUDEPATH += ${python3}/include/${python3.libPrefix}"
+      "DEFINES += PYTHON_VERSION=${python.pythonVersion}" \
+      "INCLUDEPATH += ${python}/include/${python.libPrefix}"
     make
   '';
-
-  nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qmake
-    python3
-  ];
-
-  patches = [
-    ./0001-Add-global-pro.patch
-  ];
 
   meta = {
     description = "A free, open source, multi-platform SQLite database manager.";

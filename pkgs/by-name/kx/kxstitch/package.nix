@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
     for size in 16 22 32 48 64 128 256
     do
-      install -D $src/icons/app/$size-apps-kxstitch.png $out/share/icons/hicolors/$size\x$size/kxstitch.png
+      install -D $src/icons/app/$size-apps-kxstitch.png $out/share/icons/hicolor/$size\x$size/kxstitch.png
     done
   '';
 

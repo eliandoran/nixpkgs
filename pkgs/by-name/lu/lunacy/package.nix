@@ -56,9 +56,10 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/lib";
     cp -R "opt/icons8/lunacy" "$out/lib"
+    cp -R "usr/share" "$out/share"
 
-    mkdir -p "$out/usr/share"
-    cp -R "usr/share" "$out/usr"
+    mkdir -p "$out/share/icons/hicolor/200x200/apps"
+    ln -s "opt/icons8/lunacy/Assets/LunacyLogo.png" "$out/share/icons/hicolor/200x200/apps/lunacy.png"
 
     patchelf \
       --add-needed libICE.so.6 \
@@ -72,6 +73,12 @@ stdenv.mkDerivation rec {
       $out/lib/lunacy/libcoreclrtraceptprovider.so
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/lunacy.desktop \
+      --replace "Exec=/opt/icons8/lunacy/Lunacy" "Exec=lunacy" \
+      --replace "Icon=/opt/icons8/lunacy/Assets/LunacyLogo.png" "Icon=lunacy"
   '';
 
   postFixup = ''

@@ -56,7 +56,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/lib";
     cp -R "opt/icons8/lunacy" "$out/lib"
-    cp -R "usr/share" "$out"
+
+    mkdir -p "$out/usr/share"
+    cp -R "usr/share" "$out/usr"
 
     patchelf \
       --add-needed libICE.so.6 \

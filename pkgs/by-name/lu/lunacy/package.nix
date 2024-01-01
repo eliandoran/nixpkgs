@@ -57,9 +57,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib";
     cp -R "opt/icons8/lunacy" "$out/lib"
     cp -R "usr/share" "$out/share"
-
-    mkdir -p "$out/share/icons/hicolor/200x200/apps"
-    ln -s "opt/icons8/lunacy/Assets/LunacyLogo.png" "$out/share/icons/hicolor/200x200/apps/lunacy.png"
+    install -D "opt/icons8/lunacy/Assets/LunacyLogo.png" "$out/share/icons/hicolor/200x200/apps/lunacy.png"
 
     patchelf \
       --add-needed libICE.so.6 \

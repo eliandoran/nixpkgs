@@ -3,7 +3,10 @@
 , dotnetCorePackages
 , fetchFromGitHub
 , gtk3
+, gdk-pixbuf
+, glib
 , sane-backends
+, libnotify
 }:
 
 buildDotnetModule rec {
@@ -27,7 +30,10 @@ buildDotnetModule rec {
   selfContainedBuild = true;
   runtimeDeps = [
     gtk3
+    gdk-pixbuf
+    glib
     sane-backends
+    libnotify
   ];
 
   postInstall = ''

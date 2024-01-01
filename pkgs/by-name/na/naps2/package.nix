@@ -32,12 +32,12 @@ buildDotnetModule rec {
 
   postInstall = ''
     install -D NAPS2.Setup/config/linux/com.naps2.Naps2.desktop $out/share/applications/com.naps2.Naps2.desktop
-    install -D NAPS2.Lib/Icons/scanner-16-rev0.png $out/share/icons/hicolors/16x16/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-32-rev2.png $out/share/icons/hicolors/32x32/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-48-rev2.png $out/share/icons/hicolors/48x48/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolors/64x64/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolors/72x72/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolors/128x128/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-16-rev0.png $out/share/icons/hicolor/16x16/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-32-rev2.png $out/share/icons/hicolor/32x32/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-48-rev2.png $out/share/icons/hicolor/48x48/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolor/64x64/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolor/72x72/com.naps2.Naps2.png
+    install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolor/128x128/com.naps2.Naps2.png
   '';
 
   meta = {

@@ -3424,6 +3424,12 @@
     githubId = 46303707;
     name = "Christian Lütke-Stetzkamp";
   };
+  clr-cera = {
+    email = "clrcera05@gmail.com";
+    github = "clr-cera";
+    githubId = 93736542;
+    name = "Clr";
+  };
   cmacrae = {
     email = "hi@cmacr.ae";
     github = "cmacrae";
@@ -13048,6 +13054,12 @@
       fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28";
     }];
   };
+  ninjafb = {
+    email = "oscar@oronberg.com";
+    github = "NinjaFB";
+    githubId = 54169044;
+    name = "NinjaFB";
+  };
   nintron = {
     email = "nintron@sent.com";
     github = "Nintron27";
@@ -20242,6 +20254,12 @@
     github = "zopieux";
     githubId = 81353;
     name = "Alexandre Macabies";
+  };
+  zoriya = {
+    email = "zoe.roux@zoriya.dev";
+    github = "zoriya";
+    githubId = 32224410;
+    name = "Zoe Roux";
   };
   zowoq = {
     github = "zowoq";

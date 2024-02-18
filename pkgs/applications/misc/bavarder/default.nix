@@ -13,17 +13,19 @@
 , pkg-config
 , python3Packages
 , wrapGAppsHook4
+, libportal-gtk4
+, gtksourceview5
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bavarder";
-  version = "0.1.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Bavarder";
     repo = "Bavarder";
-    rev = "0.1.0";
-    hash = "sha256-jeb9a99/wIzcKxklv/Z7DC6PlstrCPkTBFq1F5KiTMI=";
+    rev = version;
+    hash = "sha256-Ip0MFTxfJnI4C6W5a3CRZ3wGSykn+ONKNA5oFfvA/fg=";
   };
 
   format = "other";
@@ -44,12 +46,17 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libadwaita
+    libportal-gtk4
+    gtksourceview5
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    babel
     baichat-py
     lxml
     pygobject3
+    requests
+    openai
   ];
 
   preFixup = ''

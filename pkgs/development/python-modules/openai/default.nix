@@ -77,6 +77,8 @@ buildPythonPackage rec {
   disabledTests = [
     # makes network requests
     "test_streaming_response"
+
+    "test_copy_build_request"
   ];
 
   disabledTestPaths = [

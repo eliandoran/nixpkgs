@@ -3,6 +3,9 @@
 UPSTREAM_BRANCH="nixos-23.11"
 OWN_BRANCH="own-${UPSTREAM_BRANCH}"
 
+# Update remote if not exists.
+git config remote.upstream.url >&- || git remote add upstream https://github.com/NixOS/nixpkgs.git
+
 # Move to the correct branch.
 git checkout $OWN_BRANCH
 git pull

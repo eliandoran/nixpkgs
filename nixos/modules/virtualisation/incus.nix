@@ -5,7 +5,9 @@ let
   preseedFormat = pkgs.formats.yaml { };
 in
 {
-  meta.maintainers = [ lib.maintainers.adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options = {
     virtualisation.incus = {
@@ -156,7 +158,10 @@ in
         "network-online.target"
       ];
 
-      path = lib.mkIf config.boot.zfs.enabled [ config.boot.zfs.package ];
+      path = lib.mkIf config.boot.zfs.enabled [
+        config.boot.zfs.package
+        "${config.boot.zfs.package}/lib/udev"
+      ];
 
       environment = {
         # Override Path to the LXC template configuration directory

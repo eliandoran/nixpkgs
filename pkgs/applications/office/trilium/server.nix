@@ -3,8 +3,8 @@
 
 let
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "00vb36a6kxdmn8m0nmzpdi2h7qmg63xrwwbq4hvjp2njjf32wki1";
-  version = "0.62.3";
+  serverSource.sha256 = "1x08g2zb9b3n8f58bgx5878q53xz8n2jlvh18bbwaqp720wxb04h";
+  version = "0.62.6";
 in stdenv.mkDerivation {
   pname = "trilium-server";
   inherit version;

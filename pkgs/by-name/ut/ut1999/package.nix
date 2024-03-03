@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, autoPatchelfHook, fetchurl, makeDesktopItem, imagemagick
+{ lib, stdenv, requireFile, autoPatchelfHook, fetchurl, makeDesktopItem, copyDesktopItems, imagemagick
 , libgcc, wxGTK32, innoextract, libGL, SDL2, openal, libmpg123, libxmp }:
 
 let
@@ -81,6 +81,7 @@ in stdenv.mkDerivation {
   version = "2.0.0.5";
 
   buildInputs = [ imagemagick ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall
@@ -107,15 +108,14 @@ in stdenv.mkDerivation {
   '';
 
   dontUnpack = true;
-  dontBuild = true;
-  dontFixup = true;
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Unreal Tournament GOTY (1999)";
-      desktopName = "ut1999";
+      name = "ut1999";
+      desktopName = "Unreal Tournament GOTY (1999)";
       exec = "ut1999";
       icon = "ut1999";
+      comment = "Unreal Tournament GOTY (1999) with the OldUnreal patch.";
       categories = [ "Game" ];
     })
   ];

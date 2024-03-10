@@ -43,10 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Without this, nothing gets installed in $out.
-  postInstall = ''
+  postInstall = if stdenv.isLinux then ''
     install -D FRequest $out/bin/FRequest
     install -D LinuxAppImageDeployment/frequest.desktop $out/share/applications/frequest.desktop
     install -D LinuxAppImageDeployment/frequest_icon.png $out/share/icons/hicolor/128x128/apps/frequest_icon.png
+  '' else ''
+    mkdir -p $out/Applications
+    cp -r FRequest.app $out/Applications
   '';
 
   meta = {
@@ -54,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fabiobento512.github.io/FRequest";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eliandoran ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
     mainProgram = "frequest";
   };
 })

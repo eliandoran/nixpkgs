@@ -6486,7 +6486,7 @@ with pkgs;
   routersploit = callPackage ../tools/security/routersploit { };
 
   routinator = callPackage ../servers/routinator {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   rsbep = callPackage ../tools/backup/rsbep { };
@@ -8487,7 +8487,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_4 garage_0_9_0;
+      garage_0_8_7 garage_0_9_3;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -18338,8 +18338,6 @@ with pkgs;
 
   karma-runner = callPackage ../development/tools/karma-runner { };
 
-  phpunit = callPackage ../development/tools/misc/phpunit { };
-
   teller = callPackage ../development/tools/teller { };
 
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
@@ -20789,7 +20787,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
-  hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
+  hercules-ci-agent_only_safe_with_daemon = callPackage ../development/tools/continuous-integration/hercules-ci-agent {
+    haskellPackages = haskellPackages.extend (self: super: {
+      hercules-ci-cnix-store-nix = nixVersions.nix_2_16.overrideAttrs (old: {
+        meta = old.meta // {
+          knownVulnerabilities = lib.filter (vuln: vuln != "CVE-2024-27297") old.meta.knownVulnerabilities;
+        };
+      });
+    });
+  };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
 
@@ -26856,7 +26862,7 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
     yarn2nix-moretea = yarn2nix-moretea.override { inherit (super) nodejs yarn; };
     yarn = yarn.override { inherit (super) nodejs; };
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
   }));
 
   openbgpd = callPackage ../servers/openbgpd { };
@@ -40804,7 +40810,7 @@ with pkgs;
   nix-melt = callPackage ../tools/nix/nix-melt { };
 
   nixos-option = callPackage ../tools/nix/nixos-option {
-    nix = nixVersions.nix_2_15;
+    nix = nixVersions.nix_2_18;
   };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
@@ -41369,7 +41375,9 @@ with pkgs;
 
   valent = callPackage ../applications/misc/valent { };
 
-  vault = callPackage ../tools/security/vault { };
+  vault = callPackage ../tools/security/vault {
+    buildGoModule = buildGo120Module;
+  };
 
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 

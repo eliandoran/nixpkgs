@@ -284,10 +284,6 @@ with pkgs;
 
   _0x =  callPackage ../tools/misc/0x { };
 
-  atuin = callPackage ../tools/misc/atuin {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security SystemConfiguration;
-  };
-
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
 
   cve = with python3Packages; toPythonApplication cvelib;
@@ -3596,8 +3592,8 @@ with pkgs;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
-  inherit (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot {})
-    buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
+  buildbotPackages = recurseIntoAttrs (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { });
+  inherit (buildbotPackages) buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
@@ -30940,8 +30936,6 @@ with pkgs;
   };
 
   bookworm = callPackage ../applications/office/bookworm { };
-
-  bookletimposer = callPackage ../applications/office/bookletimposer { };
 
   boops = callPackage ../applications/audio/boops { };
 

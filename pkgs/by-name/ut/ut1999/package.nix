@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, autoPatchelfHook, fetchurl, makeDesktopItem, copyDesktopItems, imagemagick
+{ lib, stdenv, requireFile, autoPatchelfHook, undmg, fetchurl, makeDesktopItem, copyDesktopItems, imagemagick
 , runCommand, libgcc, wxGTK32, innoextract, libGL, SDL2, openal, libmpg123, libxmp }:
 
 let
@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
       hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
     };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
+      hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
+    };
     i686-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-x86.tar.bz2";
       hash = "sha256-1JsFKuAAj/LtYvOUPFu0Hn+zvY3riW0YlJbLd4UnaKU=";
@@ -47,44 +51,46 @@ in stdenv.mkDerivation rec {
     stdenv.cc.cc
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [
+    imagemagick
     copyDesktopItems
     autoPatchelfHook
-    imagemagick
-  ];
+  ] ++ lib.optional (stdenv.isDarwin) undmg;
 
   installPhase =
     let
       systemDir = {
         x86_64-linux = "System64";
+        x86_64-darwin = "System";
         i686-linux = "System";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+      outPrefix = if (!stdenv.isDarwin) then "$out" else "$out/UnrealTournament.app/Contents/MacOS";
     in ''
       runHook preInstall
 
       mkdir -p $out/bin
-      cp -r ./* $out
-
-      # Remove bundled libraries to use native versions instead
-      rm $out/${systemDir}/libmpg123.so* \
-        $out/${systemDir}/libopenal.so* \
-        $out/${systemDir}/libSDL2* \
-        $out/${systemDir}/libxmp.so*
-
+      cp -r ${if (!stdenv.isDarwin) then "./*" else "UnrealTournament.app"} $out
       chmod -R 755 $out
+      cd ${outPrefix}
 
-      ln -s ${unpackGog}/Music $out
-      ln -s ${unpackGog}/Sounds $out
-      cp -n ${unpackGog}/Textures/* $out/Textures || true
-      ln -s ${unpackGog}/Maps $out
-      cp -n ${unpackGog}/System/*.{u,int} $out/System || true
+      rm -rf ./{Music,Sounds,Maps}
+      ln -s ${unpackGog}/{Music,Sounds,Maps} .
 
+      cp -n ${unpackGog}/Textures/* ./Textures || true
+      cp -n ${unpackGog}/System/*.{u,int} ./System || true
+    '' + lib.optionalString (!stdenv.isDarwin) ''
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
       convert "${unpackGog}/gfw_high.ico" "ut1999.png"
       install -D ut1999-5.png "$out/share/icons/hicolor/256x256/apps/ut1999.png"
 
+      # Remove bundled libraries to use native versions instead
+      rm $out/${systemDir}/libmpg123.so* \
+        $out/${systemDir}/libopenal.so* \
+        $out/${systemDir}/libSDL2* \
+        $out/${systemDir}/libxmp.so*
+    '' + ''
       runHook postInstall
     '';
 
@@ -102,7 +108,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch.";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ eliandoran ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";

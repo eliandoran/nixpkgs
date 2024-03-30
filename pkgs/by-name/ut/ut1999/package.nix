@@ -69,37 +69,37 @@ in stdenv.mkDerivation rec {
         x86_64-darwin = "System";
         i686-linux = "System";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+      outPrefix = if (!stdenv.isDarwin) then "$out" else "$out/UnrealTournament.app/Contents/MacOS";
     in ''
       runHook preInstall
 
       mkdir -p $out/bin
-      cp -r ./* $out
-
-      # Remove bundled libraries to use native versions instead
-      rm $out/${systemDir}/libmpg123.so* \
-        $out/${systemDir}/libopenal.so* \
-        $out/${systemDir}/libSDL2* \
-        $out/${systemDir}/libxmp.so*
-
+      cp -r ${if (!stdenv.isDarwin) then "./*" else "UnrealTournament.app"} $out
       chmod -R 755 $out
+      cd ${outPrefix}
 
-      ln -s ${unpackGog}/Music $out
-      ln -s ${unpackGog}/Sounds $out
-      cp -n ${unpackGog}/Textures/* $out/Textures || true
-      ln -s ${unpackGog}/Maps $out
-      cp -n ${unpackGog}/System/*.{u,int} $out/System || true
+      rm -rf ./{Music,Sounds,Maps}
+      ln -s ${unpackGog}/{Music,Sounds,Maps} .
 
+      cp -n ${unpackGog}/Textures/* ./Textures || true
+      cp -n ${unpackGog}/System/*.{u,int} ./System || true
+    '' + lib.optionalString (!stdenv.isDarwin) ''
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
       convert "${unpackGog}/gfw_high.ico" "ut1999.png"
       install -D ut1999-5.png "$out/share/icons/hicolor/256x256/apps/ut1999.png"
 
+      # Remove bundled libraries to use native versions instead
+      rm $out/${systemDir}/libmpg123.so* \
+        $out/${systemDir}/libopenal.so* \
+        $out/${systemDir}/libSDL2* \
+        $out/${systemDir}/libxmp.so*
+    '' + ''
       runHook postInstall
     '';
 
-  # aarch64 has a bug in which .so files are not loaded
-  # see https://github.com/OldUnreal/UnrealTournamentPatches/issues/1557 for tracking the issue upstream.
+  # .so files in the SystemARM64 directory are not loaded properly on aarch64-linux
   appendRunpaths = lib.optional (stdenv.hostPlatform.system == "aarch64-linux") [
     "${placeholder "out"}/SystemARM64"
   ];

@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
       hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
     };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-arm64.tar.bz2";
+      hash = "sha256-2e9lHB12jLTR8UYofLWL7gg0qb2IqFk6eND3T5VqAx0=";
+    };
     x86_64-darwin = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
       hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
@@ -61,6 +65,7 @@ in stdenv.mkDerivation rec {
     let
       systemDir = {
         x86_64-linux = "System64";
+        aarch64-linux = "SystemARM64";
         x86_64-darwin = "System";
         i686-linux = "System";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
@@ -94,6 +99,12 @@ in stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
+  postInstall = lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+    # aarch64 has a bug in which some .so files are not loaded at runtime because they are in SystemARM64 instead of System.
+    # see https://github.com/OldUnreal/UnrealTournamentPatches/issues/1557 for tracking the issue upstream.
+    mv $out/SystemARM64/*.so" $out/System
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "ut1999";
@@ -108,7 +119,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch.";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ eliandoran ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";

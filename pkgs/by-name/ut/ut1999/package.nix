@@ -66,8 +66,8 @@ in stdenv.mkDerivation rec {
       systemDir = {
         x86_64-linux = "System64";
         aarch64-linux = "SystemARM64";
-        i686-linux = "System";
         x86_64-darwin = "System";
+        i686-linux = "System";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     in ''
       runHook preInstall
@@ -97,6 +97,12 @@ in stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
+
+  # aarch64 has a bug in which .so files are not loaded
+  # see https://github.com/OldUnreal/UnrealTournamentPatches/issues/1557 for tracking the issue upstream.
+  appendRunpaths = lib.optional (stdenv.hostPlatform.system == "aarch64-linux") [
+    "${placeholder "out"}/SystemARM64"
+  ];
 
   desktopItems = [
     (makeDesktopItem {

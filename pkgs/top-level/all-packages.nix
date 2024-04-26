@@ -17003,7 +17003,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
   cargo-benchcmp = callPackage ../development/tools/rust/cargo-benchcmp { };
-  cargo-binstall = callPackage ../development/tools/rust/cargo-binstall { };
+  cargo-binstall = callPackage ../development/tools/rust/cargo-binstall {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17020,7 +17022,9 @@ with pkgs;
       inherit rustc cargo;
     };
   };
-  cargo-component = callPackage ../development/tools/rust/cargo-component { };
+  cargo-component = callPackage ../development/tools/rust/cargo-component {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
@@ -17043,7 +17047,9 @@ with pkgs;
   cargo-hack = callPackage ../development/tools/rust/cargo-hack { };
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
   cargo-llvm-cov = callPackage ../development/tools/rust/cargo-llvm-cov { };
-  cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
+  cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-local-registry = callPackage ../development/tools/rust/cargo-local-registry { };
   cargo-lock = callPackage ../development/tools/rust/cargo-lock { };
   cargo-machete = callPackage ../development/tools/rust/cargo-machete { };
@@ -17091,16 +17097,22 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-careful = callPackage ../development/tools/rust/cargo-careful { };
-  cargo-chef = callPackage ../development/tools/rust/cargo-chef { };
+  cargo-chef = callPackage ../development/tools/rust/cargo-chef {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
-  cargo-deny = callPackage ../development/tools/rust/cargo-deny { };
+  cargo-deny = callPackage ../development/tools/rust/cargo-deny {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell { };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
-  cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
+  cargo-dist = callPackage ../development/tools/rust/cargo-dist {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
@@ -17147,10 +17159,14 @@ with pkgs;
   cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
   cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
   cargo-run-bin = callPackage ../development/tools/rust/cargo-run-bin {};
-  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
+  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
-  cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle { };
+  cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
@@ -17159,10 +17175,15 @@ with pkgs;
   cargo-supply-chain = callPackage ../development/tools/rust/cargo-supply-chain { };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme { };
-  cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
-  cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
+  cargo-tally = callPackage ../development/tools/rust/cargo-tally {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
+  cargo-temp = callPackage ../development/tools/rust/cargo-temp {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
+    inherit (rustPackages_1_76) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-ui = callPackage ../development/tools/rust/cargo-ui { };
@@ -17184,14 +17205,18 @@ with pkgs;
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
-  cargo-generate = callPackage ../development/tools/rust/cargo-generate { };
+  cargo-generate = callPackage ../development/tools/rust/cargo-generate {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-bootimage = callPackage ../development/tools/rust/bootimage { };
 
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  cargo-public-api = callPackage ../development/tools/rust/cargo-public-api { };
+  cargo-public-api = callPackage ../development/tools/rust/cargo-public-api {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
 
@@ -25546,9 +25571,7 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
-  vencord = callPackage ../misc/vencord { };
-
-  vencord-web-extension = callPackage ../misc/vencord { buildWebExtension = true; };
+  vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
@@ -26420,7 +26443,6 @@ with pkgs;
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = callPackage ../servers/http/envoy {
-    go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
   };

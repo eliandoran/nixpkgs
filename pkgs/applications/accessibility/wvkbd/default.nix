@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     pango
     wayland
   ];
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
     homepage = "https://github.com/jjsullivan5196/wvkbd";

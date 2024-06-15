@@ -218,6 +218,7 @@
   ./programs/kbdlight.nix
   ./programs/kclock.nix
   ./programs/kdeconnect.nix
+  ./programs/ladybird.nix
   ./programs/lazygit.nix
   ./programs/kubeswitch.nix
   ./programs/less.nix
@@ -1110,6 +1111,7 @@
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
+  ./services/networking/oink.nix
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
   ./services/networking/openvpn.nix

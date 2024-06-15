@@ -429,8 +429,6 @@ with pkgs;
 
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
-  catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
-
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
@@ -3658,6 +3656,8 @@ with pkgs;
 
   deterministic-uname = callPackage ../build-support/deterministic-uname { };
 
+  deterministic-host-uname = deterministic-uname.override { forPlatform = stdenv.hostPlatform; };
+
   dfmt = callPackage ../tools/text/dfmt { };
 
   diopser = callPackage ../applications/audio/diopser { };
@@ -5065,7 +5065,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_29;
+    electron = electron_30;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -6121,8 +6121,6 @@ with pkgs;
   reg = callPackage ../tools/virtualization/reg { };
 
   rex = callPackage ../tools/system/rex { };
-
-  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
 
@@ -11958,7 +11956,11 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray { };
+  povray = callPackage ../tools/graphics/povray {
+    # https://github.com/POV-Ray/povray/issues/460
+    # https://github.com/NixOS/nixpkgs/issues/311017
+    stdenv = gcc12Stdenv;
+  };
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -23583,8 +23585,6 @@ with pkgs;
 
   ookla-speedtest = callPackage ../tools/networking/ookla-speedtest { };
 
-  open62541 = callPackage ../development/libraries/open62541 { };
-
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
   };
@@ -28248,8 +28248,6 @@ with pkgs;
 
   ananicy = callPackage ../misc/ananicy { };
 
-  ananicy-cpp = callPackage ../misc/ananicy-cpp { };
-
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
@@ -28373,8 +28371,6 @@ with pkgs;
   comic-relief = callPackage ../data/fonts/comic-relief { };
 
   comixcursors = callPackage ../data/icons/comixcursors { };
-
-  corefonts = callPackage ../data/fonts/corefonts { };
 
   courier-prime = callPackage ../data/fonts/courier-prime { };
 
@@ -31761,8 +31757,6 @@ with pkgs;
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
-  waylock = callPackage ../applications/misc/waylock { };
-
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
@@ -33820,8 +33814,6 @@ with pkgs;
 
   premid = callPackage ../applications/misc/premid { };
 
-  process-cpp = callPackage ../development/libraries/process-cpp { };
-
   processing = callPackage ../applications/graphics/processing {
     jdk = jdk17;
   };
@@ -35219,7 +35211,7 @@ with pkgs;
   };
 
   virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
-    qtermwidget = lxqt.qtermwidget;
+    qtermwidget = lxqt.qtermwidget_1_4;
   };
 
   virtscreen = callPackage ../tools/admin/virtscreen { };

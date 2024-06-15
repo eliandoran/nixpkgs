@@ -3717,6 +3717,15 @@
     github = "ciferkey";
     githubId = 101422;
   };
+  cig0 = {
+    name = "Martín Cigorraga";
+    email = "cig0.github@gmail.com";
+    github = "cig0";
+    githubId = 394089;
+    keys = [{
+      fingerprint = "1828 B459 DB9A 7EE2 03F4 7E6E AFBE ACC5 5D93 84A0";
+    }];
+  };
   cigrainger = {
     name = "Christopher Grainger";
     email = "chris@amplified.ai";
@@ -10177,7 +10186,7 @@
     githubId = 27734541;
   };
   jtbx = {
-    email = "jtbx@duck.com";
+    email = "jeremy@baxters.nz";
     name = "Jeremy Baxter";
     github = "jtbx";
     githubId = 92071952;
@@ -11456,6 +11465,11 @@
     github = "leenaars";
     githubId = 4158274;
     name = "Michiel Leenaars";
+  };
+  legojames = {
+    github = "jrobinson-uk";
+    githubId = 4701504;
+    name = "James Robinson";
   };
   leifhelm = {
     email = "jakob.leifhelm@gmail.com";

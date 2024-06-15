@@ -50,22 +50,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-05-26";
+  version = "0-unstable-2024-06-04";
 
   src = fetchFromGitHub {
-    owner = "SerenityOS";
-    repo = "serenity";
-    rev = "1a9d8e8fbe360f2d3b376ca0e13c507bd2cc6e8b";
-    hash = "sha256-+g/1F/v8nTVbvtSrtyvQbeYacjTlfRpg+Htu0lRlkcU=";
+    owner = "LadybirdWebBrowser";
+    repo = "ladybird";
+    rev = "c6e9f0e7b5b050ddbb5d735ca9c65458add9b4a5";
+    hash = "sha256-+NDrd0kO9bqXFcCEJFmNwNu5jmf+wT+uUVlmbmCYLw4=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/Ladybird";
+  patches = [
+    ./nixos-font-path.patch
+  ];
 
   postPatch = ''
-    sed -i '/iconutil/d' CMakeLists.txt
+    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
-    substituteInPlace ../Meta/CMake/lagom_install_options.cmake \
+    substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
   '';
@@ -76,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     # expected version in the package's CMake.
 
     # Check that the versions match
-    grep -F 'set(CLDR_VERSION "${cldr_version}")' ../Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
-    grep -F 'set(TZDB_VERSION "${tzdata.version}")' ../Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
-    grep -F 'set(CACERT_VERSION "${cacert_version}")' ../Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
+    grep -F 'set(CLDR_VERSION "${cldr_version}")' Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
+    grep -F 'set(TZDB_VERSION "${tzdata.version}")' Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
+    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
 
     mkdir -p build/Caches
 

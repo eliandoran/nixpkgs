@@ -1,37 +1,37 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-1gi+hWrVL+mBB8pHMXnX/8kzRCQqGuut/+wO/9yBABs=";
+      hash_darwin = "sha256-154JPXP5qCM94zQRkRSvPKk6RGIhani7FUwOXgIwUZ0=";
       hash_darwin_aarch64 =
-        "sha256-skYFjXBvv+2u/K770Dd3uxFYFer6GGx/EgWfAgzE9pI=";
-      hash_linux = "sha256-67rXlDJeDSpcpEhNQq0rVS2bSWPy3GXVnTo6dwKAnZU=";
-      version = "125.0.6422.78";
+        "sha256-HButB8+2DRiaazyBiT3643sBLaauRAZ1rvmEtt8Whac=";
+      hash_linux = "sha256-6P9K6XTByonHaZYvOP+jTGizkmVdS8Ryn8UwV4BMGdQ=";
+      version = "126.0.6478.126";
     };
     deps = {
       gn = {
-        hash = "sha256-lrVAb6La+cvuUCNI90O6M/sheOEVFTjgpfA3O/6Odp0=";
-        rev = "d823fd85da3fb83146f734377da454473b93a2b2";
+        hash = "sha256-mNoQeHSSM+rhR0UHrpbyzLJC9vFqfxK1SD0X8GiRsqw=";
+        rev = "df98b86690c83b81aedc909ded18857296406159";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-04-10";
+        version = "2024-05-13";
       };
     };
-    hash = "sha256-EA8TzemtndFb8qAp4XWNjwWmNRz/P4Keh3k1Cn9qLEU=";
-    version = "125.0.6422.112";
+    hash = "sha256-Z0QeUG4ykNqdlxXYgLteJQ0jS8apC5kwW5hwlUnhod0=";
+    version = "126.0.6478.126";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        hash = "sha256-lrVAb6La+cvuUCNI90O6M/sheOEVFTjgpfA3O/6Odp0=";
-        rev = "d823fd85da3fb83146f734377da454473b93a2b2";
+        hash = "sha256-mNoQeHSSM+rhR0UHrpbyzLJC9vFqfxK1SD0X8GiRsqw=";
+        rev = "df98b86690c83b81aedc909ded18857296406159";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-04-10";
+        version = "2024-05-13";
       };
       ungoogled-patches = {
-        hash = "sha256-vHnXIrDdHGIe8byb41CiEWq3FPTecKg006dU7+iESKA=";
-        rev = "125.0.6422.112-1";
+        hash = "sha256-DLxtXcm4gPVzBeGxjD4harmdQWoH8LKn6GBlhtq/MVM=";
+        rev = "126.0.6478.126-1";
       };
     };
-    hash = "sha256-EA8TzemtndFb8qAp4XWNjwWmNRz/P4Keh3k1Cn9qLEU=";
-    version = "125.0.6422.112";
+    hash = "sha256-Z0QeUG4ykNqdlxXYgLteJQ0jS8apC5kwW5hwlUnhod0=";
+    version = "126.0.6478.126";
   };
 }

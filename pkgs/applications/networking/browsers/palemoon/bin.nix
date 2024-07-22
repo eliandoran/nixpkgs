@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.1.0";
+  version = "33.2.0";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -158,11 +158,11 @@ stdenv.mkDerivation (finalAttrs: {
     in {
       gtk3 = fetchzip {
         urls = urlRegionVariants "gtk3";
-        hash = "sha256-qjztSvNL7KNFG3sszgk5qH77do0HFQ8YTrgjFi2ZM00=";
+        hash = "sha256-h6ohLm9I6esvVa9bek/j2s/jiIcEOwjd8/dCyUvqyLw=";
       };
       gtk2 = fetchzip {
         urls = urlRegionVariants "gtk2";
-        hash = "sha256-q4zAmnCN9SHGb8PthjAx7d5FKq/oAQ8c0R+U1SWqjAA=";
+        hash = "sha256-To/41og5hxFL6efJhNfRNJw/fOXZA5Le16DZsSJrXfc=";
       };
     };
 
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];

@@ -9,7 +9,6 @@ setKV () {
 }
 
 version=$(curl -s --show-error "https://api.github.com/repos/TriliumNext/Notes/releases/latest" | jq -r '.tag_name' | tail -c +2)
-
 setKV ./default.nix version $version
 
 # Update desktop application
@@ -20,4 +19,5 @@ setKV ./desktop.nix darwinSource.sha256 $sha256_darwin64
 
 # Update server
 sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz)
+setKV ./server.nix version $version
 setKV ./server.nix serverSource.sha256 $sha256_linux64_server

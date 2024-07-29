@@ -1,10 +1,17 @@
-{ stdenv, autoPatchelfHook, fetchurl, nixosTests
-, metaCommon, version }:
+{
+  stdenv,
+  autoPatchelfHook,
+  fetchurl,
+  nixosTests,
+  metaCommon,
+  version,
+}:
 
 let
   serverSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
   serverSource.sha256 = "1yxjp0x6iym9k1sm17f8mqj8rm4ikk86wx76hlj0n0a25172igb2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "trilium-next-server";
   inherit version;
   meta = metaCommon // {

@@ -7,10 +7,11 @@ let
     license = licenses.agpl3Plus;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fliegendewurst eliandoran ];
+    maintainers = with maintainers; [ eliandoran ];
   };
   version = "0.90.4";
-in {
+in
+{
 
   trilium-next-desktop = callPackage ./desktop.nix {
     metaCommon = metaCommon;

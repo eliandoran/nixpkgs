@@ -1,8 +1,20 @@
-{ stdenv, lib, unzip, autoPatchelfHook
-, fetchurl, makeWrapper
-, alsa-lib, mesa, nss, nspr, systemd
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook3
-, metaCommon, version
+{
+  stdenv,
+  lib,
+  unzip,
+  autoPatchelfHook,
+  fetchurl,
+  makeWrapper,
+  alsa-lib,
+  mesa,
+  nss,
+  nspr,
+  systemd,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  metaCommon,
+  version,
 }:
 
 let
@@ -17,7 +29,10 @@ let
 
   meta = metaCommon // {
     mainProgram = "trilium";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -48,9 +63,9 @@ let
         exec = "trilium";
         icon = "trilium";
         comment = meta.description;
-        desktopName = "Trilium Notes";
+        desktopName = "TriliumNext Notes";
         categories = [ "Office" ];
-        startupWMClass = "trilium notes";
+        startupWMClass = "trilium notes next";
       })
     ];
 
@@ -96,4 +111,4 @@ let
   };
 
 in
-  if stdenv.isDarwin then darwin else linux
+if stdenv.isDarwin then darwin else linux

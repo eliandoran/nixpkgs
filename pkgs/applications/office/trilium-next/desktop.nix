@@ -13,7 +13,7 @@ let
   linuxSource.sha256 = "sha256-PHXbYy7QmsvOSC6N2Gu9atAqS3ti1prcyc6xmHQN3k8=";
 
   darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "";
+  darwinSource.sha256 = "sha256-qct7m0JeGXfZoBYR0VCp/TS1RD5VXqDqr+Vjv8sTKw8=";
 
   meta = metaCommon // {
     mainProgram = "trilium";

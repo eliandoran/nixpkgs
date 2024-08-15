@@ -10,10 +10,10 @@ let
   inherit version;
 
   linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "sha256-PHXbYy7QmsvOSC6N2Gu9atAqS3ti1prcyc6xmHQN3k8=";
+  linuxSource.sha256 = "034cqj0g33kkyprkh1gzk0ba4h8j8lw2l4l0jbhv4z9gr21d3va6";
 
   darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "sha256-qct7m0JeGXfZoBYR0VCp/TS1RD5VXqDqr+Vjv8sTKw8=";
+  darwinSource.sha256 = "1n0zjbm21ab13ij1rpi6fp854vis78cw3j8zhz39kcbidb5k429d";
 
   meta = metaCommon // {
     mainProgram = "trilium";

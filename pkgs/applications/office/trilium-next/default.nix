@@ -9,7 +9,7 @@ let
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ fliegendewurst eliandoran ];
   };
-  version = "0.90.2-beta";
+  version = "0.90.4";
 in {
 
   trilium-next-desktop = callPackage ./desktop.nix {

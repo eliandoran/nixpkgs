@@ -6481,6 +6481,8 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
+
   langchain-community = callPackage ../development/python-modules/langchain-community { };
 
   langchain-core = callPackage ../development/python-modules/langchain-core { };
@@ -6490,6 +6492,8 @@ self: super: with self; {
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
+
+  langfuse = callPackage ../development/python-modules/langfuse { };
 
   langid = callPackage ../development/python-modules/langid { };
 
@@ -10036,6 +10040,10 @@ self: super: with self; {
 
   pyrender = callPackage ../development/python-modules/pyrender { };
 
+  pyreqwest-impersonate = callPackage ../development/python-modules/pyreqwest-impersonate {
+    inherit (pkgs.darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
@@ -10081,6 +10089,8 @@ self: super: with self; {
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   pytlv = callPackage ../development/python-modules/pytlv { };
+
+  pywebcopy = callPackage ../development/python-modules/pywebcopy { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
@@ -13029,6 +13039,8 @@ self: super: with self; {
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
   rapidgzip = callPackage ../development/python-modules/rapidgzip { inherit (pkgs) nasm; };
+
+  rapidocr-onnxruntime = callPackage ../development/python-modules/rapidocr-onnxruntime { };
 
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 

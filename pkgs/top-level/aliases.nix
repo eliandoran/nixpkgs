@@ -674,6 +674,7 @@ mapAliases ({
   libxkbcommon_7 = throw "libxkbcommon_7 has been removed because it is impacted by security issues and not used in nixpkgs, move to 'libxkbcommon'"; # Added 2023-01-03
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lightstep-tracer-cpp = throw "lightstep-tracer-cpp is deprecated since 2022-08-29; the upstream recommends migration to opentelemetry projects.";
+  linux_wallpaperengine = throw "linux_wallpaperengine was removed due to freeimage dependency"; # Added 2024-07-19
   lispPackages_new = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   lispPackages = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   lispPackagesFor = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
@@ -1409,6 +1410,7 @@ mapAliases ({
   ### Z ###
 
   zabbix40 = throw "'zabbix40' has been removed as it has reached end of life"; # Added 2024-01-07
+  zed-editor = throw "'zed-editor' has been removed from nixos-24.05 since it was outdated (and newer versions cannot be backported as they require rust>=1.80 which is not present on this channel). Please install it from a more recent nixpkgs channel like nixos-unstable.";
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zinc = zincsearch; # Added 2023-05-28

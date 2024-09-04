@@ -19051,13 +19051,6 @@
     githubId = 2666479;
     name = "Y Nguyen";
   };
-  superherointj = {
-    email = "sergiomarcelo@yandex.com";
-    github = "superherointj";
-    githubId = 5861043;
-    matrix = "@superherointj:matrix.org";
-    name = "Sérgio Marcelo";
-  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     matrix = "@sandro:supersandro.de";
@@ -20933,6 +20926,14 @@
     github = "vq";
     githubId = 230381;
     name = "Daniel Nilsson";
+  };
+  vrifox = {
+    email = "vrifox@vrifox.cc";
+    github = "vrifox";
+    githubId = 109021367;
+    keys = [ { fingerprint = "413C 73F0 C5BD 6318 826A  42D9 D400 98E5 B60B 2197"; } ];
+    matrix = "@vri:cozy.town";
+    name = "Vri";
   };
   vrinek = {
     email = "vrinek@hey.com";

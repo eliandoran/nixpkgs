@@ -6472,8 +6472,6 @@ with pkgs;
 
   bumpver = callPackage ../applications/version-management/bumpver { };
 
-  bup = callPackage ../tools/backup/bup { };
-
   bupstash = darwin.apple_sdk_11_0.callPackage ../tools/backup/bupstash { };
 
   burp = callPackage ../tools/backup/burp { };
@@ -37076,12 +37074,6 @@ with pkgs;
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
   principia = callPackage ../games/principia { };
-
-  prismlauncher-unwrapped = kdePackages.callPackage ../games/prismlauncher {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  prismlauncher = kdePackages.callPackage ../games/prismlauncher/wrapper.nix { };
 
   pong3d = callPackage ../games/pong3d { };
 

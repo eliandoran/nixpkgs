@@ -11499,13 +11499,6 @@
     githubId = 4969294;
     name = "Louis Tim Larsen";
   };
-  loveisgrief = {
-    name = "LoveIsGrief";
-    email = "loveisgrief@tuta.io";
-    github = "LoveIsGrief";
-    githubId = 2829538;
-    keys = [ { fingerprint = "9847 4F48 18C6 4E0A F0C5  3529 E96D 1EDF A053 45EB"; } ];
-  };
   lovek323 = {
     email = "jason@oconal.id.au";
     github = "lovek323";
@@ -15954,6 +15947,13 @@
     github = "proglottis";
     githubId = 74465;
     name = "James Fargher";
+  };
+  progrm_jarvis = {
+    email = "mrjarviscraft+nix@gmail.com";
+    github = "JarvisCraft";
+    githubId = 7693005;
+    name = "Petr Portnov";
+    keys = [ { fingerprint = "884B 08D2 8DFF 6209 1857  C1C7 7E8F C8F7 D1BB 84A3"; } ];
   };
   progval = {
     email = "progval+nix@progval.net";

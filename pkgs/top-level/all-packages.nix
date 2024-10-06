@@ -7526,8 +7526,6 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon { };
 
-  mozillavpn = qt6Packages.callPackage ../tools/networking/mozillavpn { };
-
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -10895,7 +10893,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud27 nextcloud28 nextcloud29;
+    nextcloud27 nextcloud28 nextcloud29 nextcloud30;
 
   nextcloud27Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/27.json;
@@ -10905,6 +10903,9 @@ with pkgs;
   };
   nextcloud29Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/29.json;
+  };
+  nextcloud30Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/30.json;
   };
 
 
@@ -26614,8 +26615,6 @@ with pkgs;
 
   shiori = callPackage ../servers/web-apps/shiori { };
 
-  slskd = callPackage ../servers/web-apps/slskd { };
-
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
     matomo_5
@@ -36840,8 +36839,6 @@ with pkgs;
 
   left4gore-bin = callPackage ../games/left4gore { };
 
-  lgogdownloader = libsForQt5.callPackage ../games/lgogdownloader { };
-
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
 
   liberation-circuit = callPackage ../games/liberation-circuit { };
@@ -37258,7 +37255,8 @@ with pkgs;
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    inherit winetricks steam-run yad;
+    steam-run = steamPackages.steam-fhsenv-without-steam.run;
+    inherit winetricks yad;
   };
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;

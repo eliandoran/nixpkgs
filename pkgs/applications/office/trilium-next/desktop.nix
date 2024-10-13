@@ -21,11 +21,11 @@ let
   pname = "trilium-next-desktop";
   inherit version;
 
-  linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "034cqj0g33kkyprkh1gzk0ba4h8j8lw2l4l0jbhv4z9gr21d3va6";
+  linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-x64.zip";
+  linuxSource.sha256 = "sha256-CfSbDK3uEttO3h/GBh0wQ7xWTPk8dVyDIBT+qIb7Kbw=";
 
-  darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "1n0zjbm21ab13ij1rpi6fp854vis78cw3j8zhz39kcbidb5k429d";
+  darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip";
+  darwinSource.sha256 = "";
 
   meta = metaCommon // {
     mainProgram = "trilium";
@@ -46,6 +46,7 @@ let
       makeWrapper
       wrapGAppsHook3
       copyDesktopItems
+      unzip
     ];
 
     buildInputs = [

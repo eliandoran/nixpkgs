@@ -8,8 +8,8 @@
 }:
 
 let
-  serverSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "1yxjp0x6iym9k1sm17f8mqj8rm4ikk86wx76hlj0n0a25172igb2";
+  serverSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-server-linux-x64.tar.xz";
+  serverSource.sha256 = "sha256-KHFXKlu7CT/OGjvw38ZE1Dg4ICw0r7F+rv3FtLZgtLk=";
 in
 stdenv.mkDerivation {
   pname = "trilium-next-server";
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     cat > $out/bin/trilium-server <<EOF
     #!${stdenv.cc.shell}
     cd $out/share/trilium-server
-    exec ./node/bin/node src/www
+    exec ./node/bin/node src/main
     EOF
     chmod a+x $out/bin/trilium-server
   '';

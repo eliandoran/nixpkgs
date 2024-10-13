@@ -9,7 +9,7 @@ let
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ eliandoran ];
   };
-  version = "0.90.4";
+  version = "0.90.7-beta";
 in
 {
 

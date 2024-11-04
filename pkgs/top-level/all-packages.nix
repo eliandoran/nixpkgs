@@ -1007,6 +1007,10 @@ with pkgs;
 
   flare-signal = callPackage ../applications/networking/instant-messengers/flare-signal { };
 
+  forgejo = callPackage ../by-name/fo/forgejo/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
@@ -5064,7 +5068,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_31;
+    electron = electron_32;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -11602,9 +11606,15 @@ with pkgs;
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
-  inherit (import ../servers/sql/percona-server pkgs) percona-server_lts percona-server_innovation;
+  inherit (import ../servers/sql/percona-server pkgs) percona-server_8_0 percona-server_8_4;
+  percona-server_lts = percona-server_8_0;
+  # temporarily, latest LTS and Innovation release are equal
+  percona-server_innovation = percona-server_8_4;
   percona-server = percona-server_lts;
-  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_lts percona-xtrabackup_innovation;
+  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_8_0 percona-xtrabackup_8_4;
+  percona-xtrabackup_lts = percona-xtrabackup_8_0;
+  # temporarily, latest LTS and Innovation release are equal
+  percona-xtrabackup_innovation = percona-xtrabackup_8_4;
   percona-xtrabackup = percona-xtrabackup_lts;
 
   pick = callPackage ../tools/misc/pick { };
@@ -26594,10 +26604,6 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo123Module;
-  };
-
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
   tailspin = callPackage ../tools/misc/tailspin { };
@@ -29725,9 +29731,6 @@ with pkgs;
     boost = boost175;
   };
 
-
-  armcord = callPackage ../applications/networking/instant-messengers/armcord { };
-
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
@@ -29878,8 +29881,6 @@ with pkgs;
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
   buzztrax = callPackage ../applications/audio/buzztrax { };
-
-  brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
 
@@ -30996,7 +30997,6 @@ with pkgs;
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-128;
 
@@ -31017,12 +31017,6 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
-    nameSuffix = "-esr";
-    desktopName = "Firefox ESR";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
     nameSuffix = "-esr";
     desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
@@ -33204,6 +33198,8 @@ with pkgs;
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
+  scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
+
   shod = callPackage ../applications/window-managers/shod { };
 
   shotcut = qt6Packages.callPackage ../applications/video/shotcut {
@@ -35384,7 +35380,7 @@ with pkgs;
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_30; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
@@ -36636,7 +36632,10 @@ with pkgs;
     fltk = fltk-minimal;
   };
 
-  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+  factorio = callPackage ../games/factorio {
+    releaseType = "alpha";
+    versionsJson = ../games/factorio/versions-1.json;
+  };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
 
@@ -36645,6 +36644,30 @@ with pkgs;
   factorio-headless-experimental = factorio.override { releaseType = "headless"; experimental = true; };
 
   factorio-demo = factorio.override { releaseType = "demo"; };
+
+  factorio_1 = factorio;
+
+  factorio_1-experimental = factorio-experimental;
+
+  factorio_1-headless = factorio-headless;
+
+  factorio_1-headless-experimental = factorio-headless-experimental;
+
+  factorio_1-demo = factorio-demo;
+
+  factorio_2 = factorio.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-experimental = factorio-experimental.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-headless = factorio-headless.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../games/factorio/versions.json; };
+
+  # there is no factorio_2-demo
+
+  factorio-space-age = factorio_2.override { releaseType = "expansion"; };
+
+  factorio-space-age-experimental = factorio_2.override { releaseType = "expansion"; experimental = true; };
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 

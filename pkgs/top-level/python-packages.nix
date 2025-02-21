@@ -5342,6 +5342,8 @@ self: super: with self; {
 
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
+  gitignorefile = callPackage ../development/python-modules/gitignorefile { };
+
   gitlike-commands = callPackage ../development/python-modules/gitlike-commands { };
 
   gitpython = callPackage ../development/python-modules/gitpython { };
@@ -8101,6 +8103,8 @@ self: super: with self; {
 
   md-toc = callPackage ../development/python-modules/md-toc { };
 
+  md2cf = callPackage ../development/python-modules/md2cf { };
+
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
@@ -8410,6 +8414,8 @@ self: super: with self; {
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
+
+  mkdocs-with-confluence = callPackage ../development/python-modules/mkdocs-with-confluence { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 

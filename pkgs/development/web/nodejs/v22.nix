@@ -8,8 +8,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.12.0";
-  sha256 = "fe1bc4be004dc12721ea2cb671b08a21de01c6976960ef8a1248798589679e16";
+  version = "22.14.0";
+  sha256 = "c609946bf793b55c7954c26582760808d54c16185d79cb2fb88065e52de21914";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -33,9 +33,12 @@ buildNodejs {
     })
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/ec867ac7ce4e4913a8415eda48a7af9fc226097d.patch?full_index=1";
-      hash = "sha256-zfnHxC7ZMZAiu0/6PsX7RFasTevHMETv+azhTZnKI64=";
+      hash = "sha256-OQwtp/5BI9M0++d1cg0Dt/7jLH5fJEOYQRPivILKRPk=";
       revert = true;
-      excludes = [ "doc/*" ];
+      excludes = [
+        "doc/*"
+        "test/common/net.js"
+      ];
     })
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/f97865fab436fba24b46dad14435ec4b482243a2.patch?full_index=1";
@@ -47,16 +50,10 @@ buildNodejs {
       hash = "sha256-gmIyiSyNzC3pClL1SM2YicckWM+/2tsbV1xv2S3d5G0=";
       revert = true;
     })
-    # Fix for https://github.com/NixOS/nixpkgs/issues/355919
-    # FIXME: remove after a minor point release
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
-      hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
-    })
-    # fixes test failure, remove when included in release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
-      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
+      url = "https://github.com/nodejs/node/commit/869d0cbca3b0b5e594b3254869a34d549664e089.patch?full_index=1";
+      hash = "sha256-BBBShQwU20TSY8GtPehQ9i3AH4ZKUGIr8O0bRsgrpNo=";
+      revert = true;
     })
   ];
 }

@@ -15,7 +15,7 @@ let
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
   };
 
@@ -79,7 +79,7 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
-    substituteInPlace frigate/output/birdseye.py \
+    substituteInPlace frigate/output/birdseye.py frigate/api/media.py \
       --replace-fail "/opt/frigate/" "${placeholder "out"}/${python.sitePackages}/"
 
     # work around onvif-zeep idiosyncrasy

@@ -72,6 +72,7 @@
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
+  ./hardware/iosched.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
@@ -925,6 +926,7 @@
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
+  ./services/monitoring/prometheus/alertmanager-gotify-bridge.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
   ./services/monitoring/prometheus/alertmanager-webhook-logger.nix
   ./services/monitoring/prometheus/alertmanager.nix

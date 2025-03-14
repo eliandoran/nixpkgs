@@ -430,16 +430,19 @@ with pkgs;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
   dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
   dotnet-sdk_9 = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk_10 = dotnetCorePackages.sdk_10_0;
 
   dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
   dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
   dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
   dotnet-runtime_9 = dotnetCorePackages.runtime_9_0;
+  dotnet-runtime_10 = dotnetCorePackages.runtime_10_0;
 
   dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
   dotnet-aspnetcore_9 = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-aspnetcore_10 = dotnetCorePackages.aspnetcore_10_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -3525,7 +3528,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_1 garage_1_x;
+      garage_1_1_0 garage_1_x;
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };
   gauge = callPackage ../development/tools/gauge/wrapper.nix { };
@@ -5058,8 +5061,6 @@ with pkgs;
   mpi = openmpi; # this attribute should used to build MPI applications
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
-  prowlarr = callPackage ../servers/prowlarr { };
-
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
@@ -5419,8 +5420,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-    buildGoModule = buildGo122Module;
-  }) teleport_15 teleport_16 teleport;
+  }) teleport_15 teleport_16 teleport_17 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -5699,6 +5699,7 @@ with pkgs;
   unbound-full = unbound.override {
     python = python3;
     withSystemd = true;
+    withDynlibModule = true;
     withPythonModule = true;
     withDoH = true;
     withECS = true;
@@ -7887,9 +7888,9 @@ with pkgs;
   electron_29 = electron_29-bin;
   electron_30 = electron_30-bin;
   electron_31 = electron_31-bin;
-  electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
+  electron_32 = electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
-  electron_34 = electron_34-bin;
+  electron_34 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then electron-source.electron_34 else electron_34-bin;
   electron = electron_33;
   electron-bin = electron_33-bin;
   electron-chromedriver = electron-chromedriver_33;
@@ -13786,19 +13787,16 @@ with pkgs;
   ;
 
   emacs-macport = emacs29-macport;
-  emacs = emacs29;
-  emacs-gtk = emacs29-gtk3;
-  emacs-nox = emacs29-nox;
+  emacs = emacs30;
+  emacs-gtk = emacs30-gtk3;
+  emacs-nox = emacs30-nox;
+  emacs-pgtk = emacs30-pgtk;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
     emacs' = emacs;
     pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
   };
-
-  # This alias should live in aliases.nix but that would cause Hydra not to evaluate/build the packages.
-  # If you turn this into "real" alias again, please add it to pkgs/top-level/packages-config.nix again too
-  emacsPackages = emacs.pkgs // { __recurseIntoDerivationForReleaseJobs = true; };
 
   epick = callPackage ../applications/graphics/epick {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -14119,6 +14117,16 @@ with pkgs;
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
     libName = "librewolf";
+  };
+
+  librewolf-bin = wrapFirefox librewolf-bin-unwrapped {
+    pname = "librewolf-bin";
+    extraPrefsFiles = [
+      "${librewolf-bin-unwrapped}/lib/librewolf-bin-${librewolf-bin-unwrapped.version}/librewolf.cfg"
+    ];
+    extraPoliciesFiles = [
+      "${librewolf-bin-unwrapped}/lib/librewolf-bin-${librewolf-bin-unwrapped.version}/distribution/extra-policies.json"
+    ];
   };
 
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };

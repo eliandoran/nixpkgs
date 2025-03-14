@@ -324,6 +324,7 @@ mapAliases {
   emacsMacport = emacs-macport; # Added 2023-08-10
   emacsNativeComp = emacs28NativeComp; # Added 2022-06-08
   emacsWithPackages = throw "'emacsWithPackages' has been renamed to/replaced by 'emacs.pkgs.withPackages'"; # Converted to throw 2024-10-17
+  emacsPackages = emacs.pkgs; # Added 2025-03-02
 
   EmptyEpsilon = empty-epsilon; # Added 2024-07-14
   enyo-doom = enyo-launcher; # Added 2022-09-09
@@ -771,7 +772,7 @@ mapAliases {
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
   matrix-synapse-tools = recurseIntoAttrs {
-    rust-synapse-state-compress = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-state-compress;
+    rust-synapse-compress-state = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-compress-state;
     synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm;
   }; # Added 2025-02-20
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
@@ -1086,6 +1087,7 @@ mapAliases {
   rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
+  rust-synapse-state-compress = rust-synapse-compress-state;
   rustc-wasm32 = rustc; # Added 2023-12-01
   rustic-rs = rustic; # Added 2024-08-02
   rxvt_unicode = throw "'rxvt_unicode' has been renamed to/replaced by 'rxvt-unicode-unwrapped'"; # Converted to throw 2024-10-17

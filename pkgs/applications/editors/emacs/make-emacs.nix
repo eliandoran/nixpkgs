@@ -45,6 +45,7 @@
   libxml2,
   llvmPackages_14,
   m17n_lib,
+  mailcap,
   mailutils,
   makeWrapper,
   motif,
@@ -236,6 +237,14 @@ mkDerivation (finalAttrs: {
       for makefile_in in $(find . -name Makefile.in -print); do
         substituteInPlace $makefile_in --replace /bin/pwd pwd
       done
+    ''
+
+    ''
+      substituteInPlace lisp/net/mailcap.el \
+        --replace-fail '"/etc/mime.types"' \
+                       '"/etc/mime.types" "${mailcap}/etc/mime.types"' \
+        --replace-fail '("/etc/mailcap" system)' \
+                       '("/etc/mailcap" system) ("${mailcap}/etc/mailcap" system)'
     ''
 
     ""
@@ -507,5 +516,8 @@ mkDerivation (finalAttrs: {
 
   meta = meta // {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
+      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
+    ];
   };
 })

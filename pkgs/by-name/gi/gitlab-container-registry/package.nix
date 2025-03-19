@@ -20,12 +20,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-I/umXgVm9a+0Ay3ARuaa4Dua4Zhc5p2TONHvhCt3Qtk=";
 
-  postPatch = ''
-    substituteInPlace health/checks/checks_test.go \
-      --replace-fail \
-        'func TestHTTPChecker(t *testing.T) {' \
-        'func TestHTTPChecker(t *testing.T) { t.Skip("Test requires network connection")'
-  '';
+  checkFlags =
+    let
+      skippedTests = [
+        # requires internet
+        "TestHTTPChecker"
+        # requires s3 credentials/urls
+        "TestS3DriverPathStyle"
+        # flaky
+        "TestPurgeAll"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = with lib; {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";

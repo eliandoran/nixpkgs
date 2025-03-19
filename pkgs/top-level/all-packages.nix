@@ -314,6 +314,10 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
+  curv = callPackage ../by-name/cu/curv/package.nix {
+    openexr = openexr_3;
+  };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
@@ -7891,9 +7895,9 @@ with pkgs;
   electron_32 = electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
   electron_34 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then electron-source.electron_34 else electron_34-bin;
-  electron = electron_33;
-  electron-bin = electron_33-bin;
-  electron-chromedriver = electron-chromedriver_33;
+  electron = electron_34;
+  electron-bin = electron_34-bin;
+  electron-chromedriver = electron-chromedriver_34;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };

@@ -1092,6 +1092,8 @@ with pkgs;
 
   pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
 
+  py7zr = with python3Packages; toPythonApplication py7zr;
+
   q = callPackage ../tools/networking/q { };
 
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
@@ -7823,9 +7825,7 @@ with pkgs;
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
-  inherit (callPackages ../development/tools/language-servers/nixd {
-    llvmPackages = llvmPackages_16;
-  }) nixf nixt nixd;
+  inherit (callPackages ../development/tools/language-servers/nixd { }) nixf nixt nixd;
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 

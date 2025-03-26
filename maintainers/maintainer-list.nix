@@ -6347,6 +6347,12 @@
     githubId = 701128;
     name = "Eike Kettner";
   };
+  eilvelia = {
+    email = "hi@eilvelia.cat";
+    github = "eilvelia";
+    githubId = 10106819;
+    name = "eilvelia";
+  };
   eken = {
     email = "edvin.kallstrom@protonmail.com";
     github = "Eken-beep";
@@ -16869,6 +16875,12 @@
     github = "parth";
     githubId = 821972;
     name = "Parth Mehrotra";
+  };
+  paschoal = {
+    email = "paschoal@gmail.com";
+    github = "paschoal";
+    githubId = 64602;
+    name = "Matheus Paschoal";
   };
   pashashocky = {
     email = "pashashocky@gmail.com";

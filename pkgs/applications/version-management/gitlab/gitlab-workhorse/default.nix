@@ -1,11 +1,16 @@
-{ lib, fetchFromGitLab, git, buildGoModule }:
+{
+  lib,
+  fetchFromGitLab,
+  git,
+  buildGoModule,
+}:
 let
   data = lib.importJSON ../data.json;
 in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "17.9.2";
+  version = "17.9.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
@@ -17,7 +22,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/workhorse";
 
-  vendorHash = "sha256-bPabhQD19A3WrCC9D1r0TZOKM+CkoqBgOUj0pqLs3Bo=";
+  vendorHash = "sha256-nqsZ0ac5NG2hCXgaJKd9J3AphzCHxF1eJ9Iypda9Uh0=";
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;

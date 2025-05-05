@@ -1,11 +1,49 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook3, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
-, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
+{
+  fetchurl,
+  lib,
+  stdenv,
+  squashfsTools,
+  xorg,
+  alsa-lib,
+  makeShellWrapper,
+  wrapGAppsHook3,
+  openssl,
+  freetype,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gdk-pixbuf,
+  gtk3,
+  cups,
+  nspr,
+  nss_latest,
+  libpng,
+  libnotify,
+  libgcrypt,
+  systemd,
+  fontconfig,
+  dbus,
+  expat,
+  ffmpeg_4,
+  curlWithGnuTls,
+  zlib,
+  gnome,
+  at-spi2-atk,
+  at-spi2-core,
+  libpulseaudio,
+  libdrm,
+  mesa,
+  libxkbcommon,
+  pname,
+  meta,
+  harfbuzz,
+  libayatana-appindicator,
+  libdbusmenu,
+  libGL,
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
-, deviceScaleFactor ? null
+  deviceScaleFactor ? null,
 }:
 
 let
@@ -14,14 +52,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.45.454.gc16ec9f6";
+  version = "1.2.48.405.gf2c48e6f";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "79";
+  rev = "80";
 
   deps = [
     alsa-lib
@@ -88,10 +126,14 @@ stdenv.mkDerivation {
   src = fetchurl {
     name = "spotify-${version}-${rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    hash = "sha512-F1Npz/oKCsMKaQx2M5dm1dhWhaSlt8422tpRWnwuk2yjwLWrOYDY2uKYph8YFXfOdS3mV6u5yVlzgFdDqAFmCQ==";
+    hash = "sha512-Ej9SEhZhssQiH1srcgUW5lQuUNg+htudV7mcnK6o0pW5PiBYZ6qOPEIZ/1tZzD9xkUJ8hCq08fJMB8NQ12KXMg==";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 makeShellWrapper squashfsTools ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    makeShellWrapper
+    squashfsTools
+  ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -126,64 +168,72 @@ stdenv.mkDerivation {
     librarypath = "${lib.makeLibraryPath deps}:${libdir}";
   };
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $libdir
-      mv ./usr/* $out/
+    mkdir -p $libdir
+    mv ./usr/* $out/
 
-      # Work around Spotify referring to a specific minor version of
-      # OpenSSL.
+    # Work around Spotify referring to a specific minor version of
+    # OpenSSL.
 
-      ln -s ${lib.getLib openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${lib.getLib openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
-      ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
-      ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
+    ln -s ${lib.getLib openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
+    ln -s ${lib.getLib openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+    ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
+    ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg_4.lib}/lib/libavcodec.so* $libdir
-      ln -s ${ffmpeg_4.lib}/lib/libavformat.so* $libdir
+    ln -s ${ffmpeg_4.lib}/lib/libavcodec.so* $libdir
+    ln -s ${ffmpeg_4.lib}/lib/libavformat.so* $libdir
 
-      rpath="$out/share/spotify:$libdir"
+    rpath="$out/share/spotify:$libdir"
 
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $rpath $out/share/spotify/spotify
+    chmod +w "$out/share/spotify/spotify"
+    patchelf \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath $rpath $out/share/spotify/spotify
 
-      # fix Icon line in the desktop file (#48062)
-      sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
+    # fix Icon line in the desktop file (#48062)
+    sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
 
-      # Desktop file
-      mkdir -p "$out/share/applications/"
-      cp "$out/share/spotify/spotify.desktop" "$out/share/applications/"
+    # Desktop file
+    mkdir -p "$out/share/applications/"
+    cp "$out/share/spotify/spotify.desktop" "$out/share/applications/"
 
-      # Icons
-      for i in 16 22 24 32 48 64 128 256 512; do
-        ixi="$i"x"$i"
-        mkdir -p "$out/share/icons/hicolor/$ixi/apps"
-        ln -s "$out/share/spotify/icons/spotify-linux-$i.png" \
-          "$out/share/icons/hicolor/$ixi/apps/spotify-client.png"
-      done
+    # Icons
+    for i in 16 22 24 32 48 64 128 256 512; do
+      ixi="$i"x"$i"
+      mkdir -p "$out/share/icons/hicolor/$ixi/apps"
+      ln -s "$out/share/spotify/icons/spotify-linux-$i.png" \
+        "$out/share/icons/hicolor/$ixi/apps/spotify-client.png"
+    done
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    fixupPhase = ''
-      runHook preFixup
+  fixupPhase = ''
+    runHook preFixup
 
-      wrapProgramShell $out/share/spotify/spotify \
-        ''${gappsWrapperArgs[@]} \
-        ${lib.optionalString (deviceScaleFactor != null) ''
+    wrapProgramShell $out/share/spotify/spotify \
+      ''${gappsWrapperArgs[@]} \
+      ${
+        lib.optionalString (deviceScaleFactor != null) ''
           --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
-        ''} \
-        --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        ''
+      } \
+      --prefix LD_LIBRARY_PATH : "$librarypath" \
+      --prefix PATH : "${gnome.zenity}/bin" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
-      runHook postFixup
-    '';
+    runHook postFixup
+  '';
 
   meta = meta // {
-    maintainers = with lib.maintainers; [ eelco ftrvxmtrx sheenobu timokau ma27 ];
+    maintainers = with lib.maintainers; [
+      eelco
+      ftrvxmtrx
+      sheenobu
+      timokau
+      ma27
+    ];
   };
 }

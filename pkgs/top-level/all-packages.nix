@@ -1478,6 +1478,7 @@ with pkgs;
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
+  _7zz-rar = _7zz.override { enableUnfree = true; };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
@@ -1696,8 +1697,6 @@ with pkgs;
   asar = callPackage ../tools/compression/asar { };
 
   askalono = callPackage ../tools/misc/askalono { };
-
-  asleap = callPackage ../tools/networking/asleap { };
 
   awsbck = callPackage ../tools/backup/awsbck {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5068,7 +5067,6 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_32;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -10665,7 +10663,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_30;
+    electron = electron_32;
   };
 
   mosh = callPackage ../tools/networking/mosh { };
@@ -11513,6 +11511,7 @@ with pkgs;
   };
 
   p7zip = callPackage ../tools/archivers/p7zip { };
+  p7zip-rar = p7zip.override { enableUnfree = true; };
 
   packagekit = callPackage ../tools/package-management/packagekit { };
 
@@ -12728,8 +12727,6 @@ with pkgs;
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
-
-  scrcpy = callPackage ../misc/scrcpy { };
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
@@ -16506,7 +16503,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_17 = llvmPackages_17.libllvm;
   };
-  rust_1_79 = callPackage ../development/compilers/rust/1_79.nix {
+  rust_1_80 = callPackage ../development/compilers/rust/1_80.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_18 = llvmPackages_18.libllvm;
   };
@@ -16519,7 +16516,7 @@ with pkgs;
   };
 
   rustPackages_1_77 = rust_1_77.packages.stable;
-  rustPackages_1_79 = rust_1_79.packages.stable;
+  rustPackages_1_80 = rust_1_80.packages.stable;
   rustPackages = rustPackages_1_77;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
@@ -17919,10 +17916,6 @@ with pkgs;
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
-  antares = callPackage ../by-name/an/antares/package.nix {
-    electron = electron_30;
-  };
-
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
   antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
@@ -17988,21 +17981,25 @@ with pkgs;
     electron_30-bin
     electron_31-bin
     electron_32-bin
+    electron_33-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_29
     electron-chromedriver_30
     electron-chromedriver_31
-    electron-chromedriver_32;
+    electron-chromedriver_32
+    electron-chromedriver_33
+    ;
 
   electron_24 = electron_24-bin;
   electron_27 = electron_27-bin;
   electron_28 = electron_28-bin;
   electron_29 = electron_29-bin;
-  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
+  electron_30 = electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
+  electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
   electron = electron_31;
   electron-bin = electron_31-bin;
 
@@ -27319,6 +27316,8 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
   linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+  linuxPackages_6_11_hardened = linuxKernel.packages.linux_6_11_hardened;
+  linux_6_11_hardened = linuxKernel.kernels.linux_6_11_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -27758,7 +27757,11 @@ with pkgs;
   prototool = callPackage ../development/tools/prototool { };
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
-  qemu_full = lowPrio (qemu.override { smbdSupport = true; cephSupport = true; glusterfsSupport = true; });
+  qemu_full = lowPrio (qemu.override {
+    smbdSupport = lib.meta.availableOn stdenv.hostPlatform samba;
+    cephSupport = lib.meta.availableOn stdenv.hostPlatform ceph;
+    glusterfsSupport = lib.meta.availableOn stdenv.hostPlatform glusterfs && lib.meta.availableOn stdenv.hostPlatform libuuid;
+  });
 
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
@@ -30450,10 +30453,17 @@ with pkgs;
     emacs28-gtk2
     emacs28-gtk3
     emacs28-nox
+
     emacs29
     emacs29-gtk3
     emacs29-nox
     emacs29-pgtk
+
+    emacs30
+    emacs30-gtk3
+    emacs30-nox
+    emacs30-pgtk
+
     emacs28-macport
     emacs29-macport
   ;
@@ -30992,13 +31002,19 @@ with pkgs;
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
 
-  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
-
-  firefox-unwrapped = firefoxPackages.firefox;
-  firefox-beta-unwrapped = firefoxPackages.firefox-beta;
-  firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-128;
+  firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-beta-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-beta.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-devedition-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-esr-128-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-esr-128.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
@@ -31057,7 +31073,9 @@ with pkgs;
     wmClass = "firefox-aurora";
   };
 
-  librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf { };
+  librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
+    inherit stdenv lib callPackage buildMozillaMach nixosTests;
+  };
 
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
@@ -31076,7 +31094,9 @@ with pkgs;
 
   flex-ndax = callPackage ../applications/radio/flex-ndax { };
 
-  floorp-unwrapped = callPackage ../applications/networking/browsers/floorp { };
+  floorp-unwrapped = import ../applications/networking/browsers/floorp {
+    inherit stdenv lib fetchFromGitHub buildMozillaMach nixosTests python311 fetchpatch;
+  };
 
   floorp = wrapFirefox floorp-unwrapped { };
 
@@ -35010,7 +35030,6 @@ with pkgs;
 
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
     ungoogled = true;
-    channel = "ungoogled-chromium";
   });
 
   uni = callPackage ../applications/misc/uni { };
@@ -35378,7 +35397,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_32; };
 
   webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
 
@@ -36632,9 +36651,9 @@ with pkgs;
     fltk = fltk-minimal;
   };
 
-  factorio = callPackage ../games/factorio {
+  factorio = callPackage ../by-name/fa/factorio/package.nix {
     releaseType = "alpha";
-    versionsJson = ../games/factorio/versions-1.json;
+    versionsJson = ../by-name/fa/factorio/versions-1.json;
   };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
@@ -36655,13 +36674,13 @@ with pkgs;
 
   factorio_1-demo = factorio-demo;
 
-  factorio_2 = factorio.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2 = factorio.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-experimental = factorio-experimental.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-experimental = factorio-experimental.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-headless = factorio-headless.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-headless = factorio-headless.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
   # there is no factorio_2-demo
 
@@ -36669,9 +36688,9 @@ with pkgs;
 
   factorio-space-age-experimental = factorio_2.override { releaseType = "expansion"; experimental = true; };
 
-  factorio-mods = callPackage ../games/factorio/mods.nix { };
+  factorio-mods = callPackage ../by-name/fa/factorio/mods.nix { };
 
-  factorio-utils = callPackage ../games/factorio/utils.nix { };
+  factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
   fairymax = callPackage ../games/fairymax { };
 
@@ -37159,8 +37178,6 @@ with pkgs;
   randtype = callPackage ../games/randtype { };
 
   raylib-games = callPackage ../games/raylib-games { };
-
-  raycast = callPackage ../os-specific/darwin/raycast { };
 
   redeclipse = callPackage ../games/redeclipse { };
 
@@ -40231,7 +40248,7 @@ with pkgs;
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
 
   vaultwarden = callPackage ../tools/security/vaultwarden {
-    inherit (rustPackages_1_79) rustPlatform;
+    inherit (rustPackages_1_80) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
   };
   vaultwarden-sqlite = vaultwarden;

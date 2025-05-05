@@ -1,4 +1,19 @@
-{ lib, fetchFromGitHub, stdenv, stdenvNoCC,  nodePackages, buildGoModule, jq, mage, writeShellScriptBin, nixosTests, buildNpmPackage, moreutils, cacert }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  stdenvNoCC,
+  nodePackages,
+  buildGoModule,
+  jq,
+  mage,
+  writeShellScriptBin,
+  nixosTests,
+  buildNpmPackage,
+  moreutils,
+  cacert,
+}:
 
 let
   version = "0.23.0";
@@ -9,9 +24,29 @@ let
     hash = "sha256-DGdJ/qO86o4LDB2Soio6/zd5S0su6ffrtT+iOn1eQnA=";
   };
 
+  patches = [
+    # security patches from 0.24.5
+    (fetchpatch {
+      name = "security-check-saved-filters-permissions.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/bbbd936868f73a73e37d0f40313274e9e0ba30ac.patch";
+      hash = "sha256-xEsecgmfxx3M92Bpe/cDYNghP5gvEDN5D0xDZEeETuU=";
+    })
+    (fetchpatch {
+      name = "security-check-saved-filters-permissions.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/3659b7b58d4405452f3e806e12b0e3dfb4577503.patch";
+      hash = "sha256-1TQFe1N3/gwbamN5ZzKgP04oRbx5x+Tlmrt8H7V/Q2A=";
+    })
+    # security patch from 0.24.6
+    (fetchpatch {
+      name = "security-export-only-update-current-user-export-file-id.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/d47555e3c22108747bd45a5d142da5a47b98bb3f.patch";
+      hash = "sha256-/pvz3dgs07BVkhvks/yvdCnBduC03c+pjrK5iEmVdUA=";
+    })
+  ];
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
-    inherit version src;
+    inherit version src patches;
 
     postPatch = ''
       cd frontend
@@ -31,7 +66,10 @@ let
       pnpmPatch = builtins.toJSON {
         pnpm.supportedArchitectures = {
           os = [ "linux" ];
-          cpu = [ "x64" "arm64" ];
+          cpu = [
+            "x64"
+            "arm64"
+          ];
         };
       };
 
@@ -58,10 +96,12 @@ let
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = {
-        x86_64-linux = "sha256-ybAkXe2/VhGZhr59ZQOcQ+SI2a204e8uPjyE40xUVwU=";
-        aarch64-linux = "sha256-2iURs6JtI/b2+CnLwhog1X5hSFFO6OmmgFRuTbMjH+k=";
-      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      outputHash =
+        {
+          x86_64-linux = "sha256-ybAkXe2/VhGZhr59ZQOcQ+SI2a204e8uPjyE40xUVwU=";
+          aarch64-linux = "sha256-2iURs6JtI/b2+CnLwhog1X5hSFFO6OmmgFRuTbMjH+k=";
+        }
+        .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     };
 
     nativeBuildInputs = [
@@ -93,17 +133,19 @@ let
   });
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
-  skipTest = lineOffset: testCase: file:
+  skipTest =
+    lineOffset: testCase: file:
     let
       jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-    in ''
+    in
+    ''
       sed -i -e '/${testCase}/{
       ${jumpAndAppend} t.Skip();
       }' ${file}
     '';
 in
 buildGoModule {
-  inherit src version;
+  inherit src version patches;
   pname = "vikunja";
 
   nativeBuildInputs =
@@ -117,7 +159,10 @@ buildGoModule {
         fi
       '';
     in
-    [ fakeGit mage ];
+    [
+      fakeGit
+      mage
+    ];
 
   vendorHash = "sha256-d4AeQEAtPqMDe5a5aKhCe3i3pDXAMZJkJXxfcAFTx7A=";
 

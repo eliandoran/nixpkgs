@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, boost
-, clang-tools
-, cmake
-, difftastic
-, makeWrapper
-, meson
-, ninja
-, nixVersions
-, nlohmann_json
-, pkg-config
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  boost,
+  clang-tools,
+  cmake,
+  difftastic,
+  makeWrapper,
+  meson,
+  ninja,
+  nixVersions,
+  nlohmann_json,
+  pkg-config,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.18.0";
+  version = "2.18.8";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9wq14p+85oW4HlD42NJ0jyA++z3nEYjFQ6uT40xdfbc=";
+    hash = "sha256-fcloF6nA3GahZJUPXJ8ga/kHxG2CVtemjL3CafECv14=";
   };
 
   buildInputs = [
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Nix unit test runner";
     homepage = "https://github.com/nix-community/nix-unit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mic92 adisbladis ];
+    maintainers = with lib.maintainers; [
+      mic92
+      adisbladis
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "nix-unit";
   };

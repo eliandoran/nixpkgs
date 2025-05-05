@@ -1,20 +1,21 @@
-{ callPackage
-, runCommand
-, lib
-, fetchurl
-, nixosTests
-, withQuic ? false
-, fetchpatch
-, ...
+{
+  callPackage,
+  runCommand,
+  lib,
+  fetchurl,
+  nixosTests,
+  withQuic ? false,
+  fetchpatch,
+  ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.6.2";
+  version = "1.7.0";
   pname = if withQuic then "angieQuic" else "angie";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-5+7FFnf3WHzFf9EyYMAyL6dozaqEkhWzFdrU4OcfXFk=";
+    hash = "sha256-B5fm4BgV/bMLvJ9wOAA4fJyLLGARManDlQmjPXPyHAE=";
   };
 
   configureFlags = lib.optional withQuic [
@@ -39,9 +40,9 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
-    homepage    = "https://angie.software/en/";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.all;
+    homepage = "https://angie.software/en/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

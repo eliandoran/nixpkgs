@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, fetchurl
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchurl,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -12,29 +13,31 @@ buildGoModule rec {
   # See https://docs.mattermost.com/upgrade/extended-support-release.html
   # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
   # the version regex in passthru.updateScript as well.
-  version = "9.5.11";
+  version = "9.5.13";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-kPsBQjBMHxh5EGTFPNceE51nSEKSu6ieifIAV8PjpAc=";
+    hash = "sha256-h8f1VoeFwYgnOeWdjVyJFf4+vb6TWIh/6VkekK0HpQo=";
   };
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
-  overrideModAttrs = (_: {
-    buildPhase = ''
-      make setup-go-work
-      go work vendor -e
-    '';
-  });
+  overrideModAttrs = (
+    _: {
+      buildPhase = ''
+        make setup-go-work
+        go work vendor -e
+      '';
+    }
+  );
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-dRB0CqUoEIkCDlH/vcn/S1TLlhz9iWp61WM2kk+ToZk=";
+    hash = "sha256-T5Wh322qix0XaZ+4oYweKkxXIq3RcYlI0fyATgU824A=";
   };
 
   # Makes nix-update-script pick up the fetchurl for the webapp.
@@ -73,7 +76,10 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v(9\.5\.[0-9]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "^v(9\.5\.[0-9]+)$"
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
   };
@@ -81,8 +87,16 @@ buildGoModule rec {
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [ agpl3Only asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    license = with licenses; [
+      agpl3Only
+      asl20
+    ];
+    maintainers = with maintainers; [
+      ryantm
+      numinit
+      kranzes
+      mgdelacroix
+    ];
     mainProgram = "mattermost";
   };
 }

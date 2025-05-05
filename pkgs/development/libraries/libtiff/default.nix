@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  nix-update-script,
 
-, autoreconfHook
-, pkg-config
-, sphinx
+  autoreconfHook,
+  pkg-config,
+  sphinx,
 
-, lerc
-, libdeflate
-, libjpeg
-, xz
-, zlib
+  lerc,
+  libdeflate,
+  libjpeg,
+  xz,
+  zlib,
 
   # for passthru.tests
-, libgeotiff
-, python3Packages
-, imagemagick
-, graphicsmagick
-, gdal
-, openimageio
-, freeimage
-, testers
+  libgeotiff,
+  python3Packages,
+  imagemagick,
+  graphicsmagick,
+  gdal,
+  openimageio,
+  freeimage,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,13 +43,32 @@ stdenv.mkDerivation (finalAttrs: {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    # https://gitlab.com/libtiff/libtiff/-/issues/622
+    (fetchpatch {
+      name = "CVE-2023-52356.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/51558511bdbbcffdce534db21dbaf5d54b31638a.patch";
+      hash = "sha256-A1G23MEUS1AvoREcKFqoqV2sYtCqIMfzPaIIFpZNBWE=";
+    })
+    # https://gitlab.com/libtiff/libtiff/-/issues/624
+    (fetchpatch {
+      name = "CVE-2024-7006.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/818fb8ce881cf839fbc710f6690aadb992aa0f9e.patch";
+      hash = "sha256-XbRQtNxbNMofKTbeTsbHBKv96KTKSGngCepWPIVWLH4=";
+    })
   ];
 
   postPatch = ''
     mv VERSION VERSION.txt
   '';
 
-  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "dev_private"
+    "out"
+    "man"
+    "doc"
+  ];
 
   postFixup = ''
     moveToOutput include/tif_config.h $dev_private
@@ -58,7 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    sphinx
+  ];
 
   buildInputs = [
     lerc
@@ -78,7 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit
+        libgeotiff
+        imagemagick
+        graphicsmagick
+        gdal
+        openimageio
+        freeimage
+        ;
       inherit (python3Packages) pillow imread;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;

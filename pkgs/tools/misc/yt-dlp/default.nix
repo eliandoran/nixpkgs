@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, brotli
-, hatchling
-, certifi
-, ffmpeg
-, rtmpdump
-, atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, pythonRelaxDepsHook
-, requests
-, secretstorage
-, urllib3
-, atomicparsleySupport ? true
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, withAlias ? false # Provides bin/youtube-dl for backcompat
-, update-python-libraries
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  brotli,
+  hatchling,
+  certifi,
+  ffmpeg,
+  rtmpdump,
+  atomicparsley,
+  pycryptodomex,
+  websockets,
+  mutagen,
+  pythonRelaxDepsHook,
+  requests,
+  secretstorage,
+  urllib3,
+  atomicparsleySupport ? true,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  withAlias ? false, # Provides bin/youtube-dl for backcompat
+  update-python-libraries,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,13 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.10.22";
+  version = "2024.12.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-R7gqH9IkEbXJXvLwoa4a9Obf1zbqmf2yoOpBRFq8Yro=";
+    hash = "sha256-dD2+CB6ocb4/X/CD4s2V2oZt6nc/xwrmsQmDjPv3KsQ=";
   };
 
   build-system = [
@@ -99,7 +100,7 @@ buildPythonPackage rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [
       mkg20001

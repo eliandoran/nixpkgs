@@ -1,12 +1,27 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch
-, pkg-config, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc
-, glib, protobuf, util-linux, qrencode
-, AppKit
-, withGui ? true, libevent
-, qtbase, qttools
-, zeromq
-, fmt
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  db48,
+  boost,
+  zlib,
+  miniupnpc,
+  glib,
+  protobuf,
+  util-linux,
+  qrencode,
+  AppKit,
+  withGui ? true,
+  libevent,
+  qtbase,
+  qttools,
+  zeromq,
+  fmt,
 }:
 
 mkDerivation rec {
@@ -36,16 +51,37 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib zeromq fmt
-                  miniupnpc glib protobuf util-linux libevent ]
-                  ++ lib.optionals stdenv.isDarwin [ AppKit ]
-                  ++ lib.optionals withGui [ qtbase qttools qrencode ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs =
+    [
+      openssl
+      db48
+      boost
+      zlib
+      zeromq
+      fmt
+      miniupnpc
+      glib
+      protobuf
+      util-linux
+      libevent
+    ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      qrencode
+    ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                   ++ lib.optionals withGui [
-                      "--with-gui=qt5"
-                      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin" ];
+  configureFlags =
+    [ "--with-boost-libdir=${boost.out}/lib" ]
+    ++ lib.optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   enableParallelBuilding = true;
 
@@ -57,7 +93,7 @@ mkDerivation rec {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
-    longDescription= ''
+    longDescription = ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
       to anyone in the world. It is based on the Bitcoin protocol but differs
       from Bitcoin in that it can be efficiently mined with consumer-grade hardware.
@@ -70,5 +106,10 @@ mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];
+    knownVulnerabilities = [
+      "CVE-2023-33297"
+      "CVE-2024-35202"
+      "https://bitcoincore.org/en/2024/10/08/disclose-mutated-blocks-hindering-propagation/"
+    ];
   };
 }

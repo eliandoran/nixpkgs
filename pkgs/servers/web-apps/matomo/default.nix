@@ -7,15 +7,15 @@ let
       hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
     };
     matomo_5 = {
-      version = "5.1.1";
-      hash = "sha256-xi6R9O/pOxBgga6+wwqziwDKK7Q1Ispldvxg+0mpdeQ=";
+      version = "5.2.0";
+      hash = "sha256-0hMbcvntoOWFJ00DytkFfcP7/giqtrhmxawVNzMP2KA=";
     };
     matomo-beta = {
-      version = "5.0.0";
+      version = "5.2.0";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
-      beta = "rc9";
-      hash = "sha256-OXxJCEXcrl6UXYh+jbNqLQGYphrSjxaOAZg3AZVPAqs=";
+      beta = null;
+      hash = "sha256-0hMbcvntoOWFJ00DytkFfcP7/giqtrhmxawVNzMP2KA=";
     };
   };
   common = pname: { version, hash, beta ? null }:
@@ -119,6 +119,7 @@ let
           homepage = "https://matomo.org/";
           platforms = platforms.all;
           maintainers = with maintainers; [ florianjacob kiwi sebbel twey boozedog ] ++ teams.flyingcircus.members;
+          knownVulnerabilities = lib.optional (lib.versionOlder version "5.0") "Support for Matomo 4 ended on 2024-12-19. It is recommended to upgrade to `matomo_5` instead.";
         };
       };
 in

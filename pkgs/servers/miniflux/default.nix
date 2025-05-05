@@ -1,24 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch2,
+  installShellFiles,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "miniflux";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     rev = "refs/tags/${version}";
-    hash = "sha256-FAeUhB05mDcdlHzJRLJR9mSKeqpKWed4Kxa89j/pjOQ=";
+    hash = "sha256-B/joQJ64/NPiZo1JEAhcrHLQ67m1oVTbmBk3drZ8lC4=";
   };
 
-  vendorHash = "sha256-FVm6kTZFp6qSUUuB2R4owzSxk+zfBWW1o7kOFadSS38=";
+  vendorHash = "sha256-hzgfuwewJDIz/iaBU3lyB2/mAxYGTWsKkaqAiCkPQQ0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
 
   ldflags = [
-    "-s" "-w" "-X miniflux.app/v2/internal/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X miniflux.app/v2/internal/version.Version=${version}"
   ];
 
   postInstall = ''
@@ -32,7 +41,12 @@ buildGoModule rec {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
+    maintainers = with maintainers; [
+      rvolosatovs
+      benpye
+      emilylange
+      adamcstephens
+    ];
     mainProgram = "miniflux";
   };
 }

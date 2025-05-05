@@ -1,49 +1,50 @@
-{ alsa-lib
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, gtk4
-, lib
-, libX11
-, libxcb
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, stdenv
-, systemd
-, at-spi2-atk
-, at-spi2-core
-, autoPatchelfHook
-, wrapGAppsHook3
-, qt6
-, proprietaryCodecs ? false
-, vivaldi-ffmpeg-codecs
+{
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  gtk4,
+  lib,
+  libX11,
+  libxcb,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  stdenv,
+  systemd,
+  at-spi2-atk,
+  at-spi2-core,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  qt6,
+  proprietaryCodecs ? false,
+  vivaldi-ffmpeg-codecs,
 }:
 
 let
@@ -51,11 +52,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "111.0.5168.61";
+  version = "113.0.5230.47";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-O2QqosmhhFk6KfiAdlpDYOsZUqGhvtwzYFi2I90Hemo=";
+    hash = "sha256-0RQTcROUv85yE6ceLkyF09/++WrvK828h5hoN1QYpCE=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -106,22 +107,24 @@ stdenv.mkDerivation rec {
     qt6.qtbase
   ];
 
-  runtimeDependencies = [
-    # Works fine without this except there is no sound.
-    libpulseaudio.out
+  runtimeDependencies =
+    [
+      # Works fine without this except there is no sound.
+      libpulseaudio.out
 
-    # This is a little tricky. Without it the app starts then crashes. Then it
-    # brings up the crash report, which also crashes. `strace -f` hints at a
-    # missing libudev.so.0.
-    (lib.getLib systemd)
+      # This is a little tricky. Without it the app starts then crashes. Then it
+      # brings up the crash report, which also crashes. `strace -f` hints at a
+      # missing libudev.so.0.
+      (lib.getLib systemd)
 
-    # Error at startup:
-    # "Illegal instruction (core dumped)"
-    gtk3
-    gtk4
-  ] ++ lib.optionals proprietaryCodecs [
-    vivaldi-ffmpeg-codecs
-  ];
+      # Error at startup:
+      # "Illegal instruction (core dumped)"
+      gtk3
+      gtk4
+    ]
+    ++ lib.optionals proprietaryCodecs [
+      vivaldi-ffmpeg-codecs
+    ];
 
   dontWrapQtApps = true;
 

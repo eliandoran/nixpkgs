@@ -1659,6 +1659,8 @@ self: super: with self; {
 
   beniget = callPackage ../development/python-modules/beniget { };
 
+  benqprojector = callPackage ../development/python-modules/benqprojector { };
+
   bentoml = callPackage ../development/python-modules/bentoml { };
 
   berkeleydb = callPackage ../development/python-modules/berkeleydb { };
@@ -12484,6 +12486,8 @@ self: super: with self; {
   pyro4 = callPackage ../development/python-modules/pyro4 { };
 
   pyro5 = callPackage ../development/python-modules/pyro5 { };
+
+  pyroaring = callPackage ../development/python-modules/pyroaring { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 

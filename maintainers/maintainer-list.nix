@@ -3584,16 +3584,6 @@
     github = "CaptainJawZ";
     githubId = 43111068;
   };
-  caralice = {
-    name = "Alice Carroll";
-    email = "nix@alice-carroll.pet";
-    github = "thecaralice";
-    githubId = 43097806;
-    keys = [
-      { fingerprint = "C7EA B182 2AB1 246C 0FB8  DD72 0514 0B67 902C D3AF"; }
-      { fingerprint = "DA77 EDDB 4AF5 244C 665E  9176 A05E A86A 5834 1AA8"; }
-    ];
-  };
   CardboardTurkey = {
     name = "Kiran Ostrolenk";
     email = "kiran@ostrolenk.co.uk";
@@ -4571,6 +4561,12 @@
     githubId = 292650;
     name = "Daniel McCarney";
     keys = [ { fingerprint = "8026 D24A A966 BF9C D3CD  CB3C 08FB 2BFC 470E 75B4"; } ];
+  };
+  cr0n = {
+    name = "cr0n";
+    github = "n0rc";
+    githubId = 355000;
+    email = "cr0n@cypherpunks.cc";
   };
   Crafter = {
     email = "crafter@crafter.rocks";
@@ -6402,6 +6398,12 @@
     githubId = 8146662;
     name = "Eric Lesiuta";
   };
+  elfenermarcell = {
+    email = "elfenermarcell@gmail.com";
+    github = "elfenermarcell";
+    githubId = 183738665;
+    name = "Marcell Tóth";
+  };
   eliandoran = {
     email = "contact@eliandoran.me";
     name = "Elian Doran";
@@ -6979,6 +6981,12 @@
     github = "evils";
     githubId = 30512529;
     name = "Evils";
+  };
+  evythedemon = {
+    name = "Evy Garden";
+    github = "EvysGarden";
+    githubId = 92547295;
+    email = "evysgarden@protonmail.com";
   };
   ewok = {
     email = "ewok@ewok.ru";
@@ -9987,6 +9995,13 @@
     name = "James Atkins";
     github = "james-atkins";
     githubId = 9221409;
+  };
+  jamesward = {
+    email = "james@jamesward.com";
+    name = "James Ward";
+    github = "jamesward";
+    githubId = 65043;
+    keys = [ { fingerprint = "82F9 4BBD F95C 247B BD21  396B 9A0B 94DE C0FF A7EE"; } ];
   };
   jamiemagee = {
     email = "jamie.magee@gmail.com";
@@ -13388,6 +13403,16 @@
     githubId = 1809783;
     name = "Marco Maggesi";
   };
+  magistau = {
+    name = "Mg. Tau";
+    email = "nix@alice-carroll.pet";
+    github = "magistau";
+    githubId = 43097806;
+    keys = [
+      { fingerprint = "C7EA B182 2AB1 246C 0FB8  DD72 0514 0B67 902C D3AF"; }
+      { fingerprint = "DA77 EDDB 4AF5 244C 665E  9176 A05E A86A 5834 1AA8"; }
+    ];
+  };
   magnetophon = {
     email = "bart@magnetophon.nl";
     github = "magnetophon";
@@ -14956,6 +14981,12 @@
     github = "MortenMunk";
     githubId = 92527083;
     name = "Morten Munk";
+  };
+  morxemplum = {
+    email = "morxemplum@outlook.com";
+    github = "Morxemplum";
+    githubId = 44561540;
+    name = "Synth Morxemplum";
   };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";

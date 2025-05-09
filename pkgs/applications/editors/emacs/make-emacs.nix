@@ -64,7 +64,11 @@
   zlib,
 
   # Boolean flags
-  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+
+  # FIXME: Native compilation breaks build and runtime on macOS 15.4;
+  # see <https://github.com/NixOS/nixpkgs/issues/395169>.
+  withNativeCompilation ?
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin,
   noGui ? false,
   srcRepo ? true,
   withAcl ? false,
@@ -514,10 +518,10 @@ mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) emacs-daemon; };
   };
 
-  meta = meta // {
+  meta = {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
     knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
       "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
     ];
-  };
+  } // meta;
 })

@@ -35,6 +35,7 @@
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   commandLineArgs ? "",
   pkgsBuildBuild,
+  pkgsBuildHost,
   pkgs,
 }:
 
@@ -50,8 +51,10 @@ let
     min-version: result:
     let
       min-supported-version = (lib.head (lib.attrValues electron-source)).unwrapped.info.chromium.version;
+      # Warning can be toggled by changing the value of enabled:
+      enabled = false;
     in
-    lib.warnIf (lib.versionAtLeast min-supported-version min-version)
+    lib.warnIf (enabled && lib.versionAtLeast min-supported-version min-version)
       "chromium: min-supported-version ${min-supported-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
       result;
   chromiumVersionAtLeast =
@@ -106,6 +109,12 @@ let
         };
         pkgsBuildBuild = pkgsBuildBuild // {
           rustc = pkgsBuildBuild.rustPackages_1_83.rustc;
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "136") {
+        nodejs = pkgs.nodejs_22;
+        pkgsBuildHost = pkgsBuildHost // {
+          nodejs = pkgsBuildHost.nodejs_22;
         };
       }
     );

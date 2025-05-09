@@ -142,7 +142,7 @@ let
             'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => [
               'bucket' => '${s3.bucket}',
-              'autocreate' => ${boolToString s3.autocreate},
+              'verify_bucket_exists' => ${boolToString s3.verify_bucket_exists},
               'key' => '${s3.key}',
               'secret' => nix_read_secret('${s3.secretFile}'),
               ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
@@ -276,6 +276,10 @@ in
     (mkRenamedOptionModule
       [ "services" "nextcloud" "extraOptions" ]
       [ "services" "nextcloud" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "objectstore" "s3" "autocreate" ]
+      [ "services" "nextcloud" "config" "objectstore" "s3" "verify_bucket_exists" ]
     )
   ];
 
@@ -568,10 +572,11 @@ in
               The name of the S3 bucket.
             '';
           };
-          autocreate = mkOption {
+          verify_bucket_exists = mkOption {
             type = types.bool;
+            default = true;
             description = ''
-              Create the objectstore if it does not exist.
+              Create the objectstore bucket if it does not exist.
             '';
           };
           key = mkOption {
@@ -1098,6 +1103,15 @@ in
               fi
               if [ -z "$(<${c.adminpassFile})" ]; then
                 echo "adminpassFile ${c.adminpassFile} is empty!"
+                exit 1
+              fi
+
+              # Check if systemd-tmpfiles setup worked correctly
+              if [[ ! -O "${datadir}/config" ]]; then
+                echo "${datadir}/config is not owned by user 'nextcloud'!"
+                echo "Please check the logs via 'journalctl -u systemd-tmpfiles-setup'"
+                echo "and make sure there are no unsafe path transitions."
+                echo "(https://nixos.org/manual/nixos/stable/#module-services-nextcloud-pitfalls-during-upgrade)"
                 exit 1
               fi
 

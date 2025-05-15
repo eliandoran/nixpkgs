@@ -41,11 +41,11 @@ jobs:
   # Check that code owners is valid
   check:
     name: Check
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     needs: get-merge-commit
     if: github.repository_owner == 'NixOS' && needs.get-merge-commit.outputs.mergedSha
     steps:
-      - uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
+      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -89,10 +89,10 @@ jobs:
   # Request reviews from code owners
   request:
     name: Request
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     if: github.repository_owner == 'NixOS'
     steps:
-      - uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
+      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
       # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
       # This is intentional, because we need to request the review of owners as declared in the base branch.

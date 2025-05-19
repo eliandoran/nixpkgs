@@ -4765,6 +4765,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cything = {
+    name = "cy";
+    email = "nix@cything.io";
+    github = "cything";
+    githubId = 45041772;
+  };
   d-brasher = {
     github = "d-brasher";
     githubId = 175485311;
@@ -24665,12 +24671,6 @@
     github = "zaldnoay";
     githubId = 5986078;
     name = "Zunway Liang";
-  };
-  zanculmarktum = {
-    name = "Azure Zanculmarktum";
-    email = "zanculmarktum@gmail.com";
-    github = "zanculmarktum";
-    githubId = 16958511;
   };
   zane = {
     name = "Zane van Iperen";
